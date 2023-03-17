@@ -1,0 +1,22 @@
+{
+  "name": "graphprojectmanager",
+  "version": "1.0.0",
+  "description": "Graph Project Manager est un outil de gestion de projet basé sur un graphe. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenTree-Learning/GraphProjectManager.git"
+  },
+  "author": "Louis Grante",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OpenTree-Learning/GraphProjectManager/issues"
+  },
+  "homepage": "https://github.com/OpenTree-Learning/GraphProjectManager#readme",
+  "devDependencies": {
+    "typescript": "^5.0.2"
+  }
+}
