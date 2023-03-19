@@ -1,4 +1,4 @@
-import * as vault from 'node-vault';
+import vault from 'node-vault';
 import * as dotenv from 'dotenv';
 
 
