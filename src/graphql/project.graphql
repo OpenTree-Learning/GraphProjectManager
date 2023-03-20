@@ -1,5 +1,5 @@
 type Project {
-	id: ID! @id
+	id: ID @id
 	name: String!
 	description: String
 	createdAt: DateTime!

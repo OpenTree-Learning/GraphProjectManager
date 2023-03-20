@@ -6,7 +6,7 @@ enum PriorityOrder {
 }
 
 type Task {
-	id: ID! @id
+	id: ID @id
 	name: String!
 	description: String
 	createdAt: DateTime!

@@ -37,6 +37,7 @@ async function createUser(
 
 	const result = await driver.executeQuery(
 		`create (u:User {
+			id: apoc.create.uuid(),
 			username: $username, 
 			firstname: $firstname,
 			lastname: $lastname,
@@ -61,9 +62,17 @@ async function createUser(
 	};
 }
 
+//async function updateUser(
+//	parent: any, 
+//	args: { username: string, firstname: string, lastname: string, email: string, password: string }, 
+//	context: Context
+//) {
+//}
+
 const resolvers = {
 	Mutation: {
-		createUser
+		createUser,
+		//updateUser
 	}
 }
 
