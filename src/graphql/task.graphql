@@ -1,0 +1,21 @@
+enum PriorityOrder {
+	LOW,
+	NORMAL,
+	HIGH,
+	URGENT
+}
+
+type Task {
+	id: ID! @id
+	name: String!
+	description: String
+	createdAt: DateTime!
+		@timestamp(operations: [CREATE])
+	duration: Duration
+	labels: [String]
+	priorityOrder: PriorityOrder
+	primitives: [Task!]! 
+		@relationship(type: "DEPENDS_ON", direction: OUT)
+	contributors: [User!]! 
+		@relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
+}
