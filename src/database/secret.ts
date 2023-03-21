@@ -10,11 +10,11 @@ async function unseal (client: vault.client, keys: Array<string>, shares: number
 			secret_threshold: threshold,
 			key: keys[i]
 		});
-		logger.info(`Unsealing database secrets (${i + 1}/${threshold})`);
+		logger.info(`Unsealing secrets (${i + 1}/${threshold})`);
 	}
 }
 
-async function loadDatabaseSecrets (): Promise<void> {
+async function loadSecrets (): Promise<void> {
 	dotenv.config();
 
 	const options = {
@@ -32,11 +32,13 @@ async function loadDatabaseSecrets (): Promise<void> {
 	await unseal(client, keys, 5, 3);
 	await client.userpassLogin({username, password});
 
-	const {data} = await client.read('kv/data/db');
+	const dbSecrets = await client.read('kv/data/db');
+	const jwtSecret = await client.read('kv/data/jwt_secret');
 
-	process.env['DATABASE_USERNAME'] = data.data.USERNAME;
-	process.env['DATABASE_PASSWORD'] = data.data.PASSWORD;
+	process.env['DATABASE_USERNAME'] = dbSecrets.data.data.USERNAME;
+	process.env['DATABASE_PASSWORD'] = dbSecrets.data.data.PASSWORD;
+	process.env['JWT_SECRET'] = jwtSecret.data.data.SECRET;
 }
 
 
-export default loadDatabaseSecrets;
+export default loadSecrets;

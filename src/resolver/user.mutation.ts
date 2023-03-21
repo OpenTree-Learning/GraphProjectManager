@@ -1,5 +1,7 @@
 import * as neo4j from 'neo4j-driver';
 import bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
+
 import { Context } from '../types';
 import { MutationResponse } from './types';
 
@@ -117,12 +119,49 @@ async function updateUser(
 }
 
 
-const resolvers = {
-	Mutation: {
-		createUser,
-		updateUser
+async function signIn(
+	parent: any, 
+	args: { email: string, password: string }, 
+	context: Context
+) {
+	const invalidIDs = 'Invalid email or password';
+
+	const driver: neo4j.Driver = context.driver;
+	const usersWithEmail = await getUserBy({email: args.email}, driver)
+
+	if (usersWithEmail.length === 0) {
+		return {
+			status: invalidIDs,
+			data: null
+		};
 	}
+
+	const user = usersWithEmail[0].get('u').properties;
+	const hashedPassword  = user.password;
+
+	if (!bcrypt.compareSync(args.password, hashedPassword)) {
+		return {
+			status: invalidIDs,
+		       	data: null	
+		}
+	}
+
+	const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET as string);
+
+	return {
+		status: 'User successfully authenticated',
+		data: token
+	};
 }
 
 
-export default resolvers
+const resolvers = {
+	Mutation: {
+		createUser,
+		updateUser,
+		signIn
+	}
+};
+
+
+export default resolvers;

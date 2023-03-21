@@ -26,6 +26,11 @@ type UserResponse {
 	data: UserResponseData
 }
 
+type AuthenticationResponse {
+	status: String!
+	data: String # JWT
+}
+
 type UserResponseData {
 	id: ID!
 	username: String!
@@ -53,4 +58,6 @@ type Mutation {
 		email: String
 		password: String
 	): UserResponse
+
+	signIn(email: String!, password: String!): AuthenticationResponse
 }
