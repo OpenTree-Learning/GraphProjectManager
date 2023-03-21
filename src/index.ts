@@ -6,14 +6,15 @@ import loadDatabaseSecrets from './database/secret';
 import createDriver from './database/driver';
 import resolvers from './resolver';
 import { Context } from './types';
+import logger from './logger';
 
 
-console.log('Starting server...');
+logger.info('Server starting...');
 
 loadDatabaseSecrets()
 .then(async () => {
-	console.log('Secrets unsealed');
-	console.log('Connecting to database...');
+	logger.info('Secrets unsealed');
+	logger.info('Connecting to database...');
 
 	const username = process.env.DATABASE_USERNAME as string;
 	const password = process.env.DATABASE_PASSWORD as string;
@@ -32,8 +33,10 @@ loadDatabaseSecrets()
 		context: () => ({ driver } as Context)
 	});
 
+	logger.info('Connected to database!');
+
 	
 	server.listen().then(({ url }) => {
-		console.log(`🚀 Server ready at ${url}`);
+		logger.info(`🚀 Server ready at ${url}`);
 	})
 })

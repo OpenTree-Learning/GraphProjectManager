@@ -1,5 +1,6 @@
 import vault from 'node-vault';
 import * as dotenv from 'dotenv';
+import logger from '../logger';
 
 
 async function unseal (client: vault.client, keys: Array<string>, shares: number, threshold: number): Promise<void> {
@@ -9,7 +10,7 @@ async function unseal (client: vault.client, keys: Array<string>, shares: number
 			secret_threshold: threshold,
 			key: keys[i]
 		});
-		console.log(`Unsealing database secrets (${i + 1}/${threshold})`);
+		logger.info(`Unsealing database secrets (${i + 1}/${threshold})`);
 	}
 }
 

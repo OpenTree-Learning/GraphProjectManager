@@ -19,7 +19,6 @@ async function getUserBy(by: any, driver: neo4j.Driver): Promise<any> {
 function hashPassword(saltRounds: number, password: string): string {
 	const salt = bcrypt.genSaltSync(saltRounds);
 
-	console.log({saltRounds, password, salt});
 	return bcrypt.hashSync(password, salt);
 }	
 
@@ -112,9 +111,7 @@ async function updateUser(
 	const setQuery = Object.keys(args).map(k => `set u.${k} = $${k}`).join('\n');
 	const query = `match (u:User {id: $id})\n${setQuery}\nreturn u`;
 
-	const result = await driver.executeQuery(query, {
-		...args
-	})
+	const result = await driver.executeQuery(query, args);
 
 	return createResponse(result, 'User successfully updated!');
 }
