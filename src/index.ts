@@ -2,6 +2,7 @@ import { Neo4jGraphQL } from '@neo4j/graphql';
 import { Neo4jGraphQLAuthJWTPlugin } from '@neo4j/graphql-plugin-auth';
 import { ApolloServer } from 'apollo-server';
 import { loadFiles } from 'graphql-import-files';
+import * as express from 'express';
 
 import loadSecrets from './database/secret';
 import createDriver from './database/driver';
@@ -11,7 +12,6 @@ import logger from './logger';
 
 
 logger.info('Server starting...');
-
 loadSecrets()
 .then(async () => {
 	logger.info('Secrets unsealed!');
@@ -36,7 +36,12 @@ loadSecrets()
 	const schema = await neoSchema.getSchema();
 	const server = new ApolloServer({
 		schema, 
-		context: () => ({ driver } as Context)
+		context: ({ req }: { req: express.Request }): Context => {
+			return {
+				req,
+				driver
+			};
+		}
 	});
 
 	logger.info('Connected to database!');
