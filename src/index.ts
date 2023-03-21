@@ -8,8 +8,13 @@ import resolvers from './resolver';
 import { Context } from './types';
 
 
+console.log('Starting server...');
+
 loadDatabaseSecrets()
 .then(async () => {
+	console.log('Secrets unsealed');
+	console.log('Connecting to database...');
+
 	const username = process.env.DATABASE_USERNAME as string;
 	const password = process.env.DATABASE_PASSWORD as string;
 

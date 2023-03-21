@@ -44,4 +44,13 @@ type Mutation {
 		email: String!
 		password: String!
 	): UserResponse
+
+	updateUser(
+		id: ID!
+		username: String
+		firstname: String
+		lastname: String
+		email: String
+		password: String
+	): UserResponse
 }
