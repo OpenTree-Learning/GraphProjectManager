@@ -119,7 +119,7 @@ async function updateUser(
 }
 
 
-async function signIn(
+async function auth(
 	parent: any, 
 	args: { email: string, password: string }, 
 	context: Context
@@ -159,7 +159,7 @@ const resolvers = {
 	Mutation: {
 		createUser,
 		updateUser,
-		signIn
+		auth
 	}
 };
 

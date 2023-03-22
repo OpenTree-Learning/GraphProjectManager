@@ -10,3 +10,24 @@ type Project {
 	tasks: [Task!]! 
 		@relationship(type: "DEPENDS_ON", direction: OUT)
 }
+
+extend type Project @auth(
+  rules: [
+    {
+      operations: [READ],
+      allow: {
+        contributors: {
+          id: "$jwt.sub"
+        }
+      }
+    }
+    {
+      operations: [READ, UPDATE, DELETE],
+      allow: {
+        owner: {
+          id: "$jwt.sub"
+        }
+      }
+    }
+  ]
+)

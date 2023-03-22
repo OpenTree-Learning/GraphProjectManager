@@ -1,63 +1,72 @@
 type User {
-	id: ID @id
-	username: String!
-	firstname: String
-	lastname: String
-	email: String!
-	password: String!
-	createdAt: DateTime
-		@timestamp(operations: [CREATE])
-	updatedAt: DateTime
-		@timestamp(operations: [UPDATE])
-	ownedProjects: [Project!]!
-		@relationship(type: "OWNS", direction: OUT)
-	contributedProjects: [Project!]!
-		@relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
-	tasks: [Task!]!
-		@relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
+  id: ID @id
+  username: String!
+  firstname: String
+  lastname: String
+  email: String!
+  password: String!
+  createdAt: DateTime
+          @timestamp(operations: [CREATE])
+  updatedAt: DateTime
+          @timestamp(operations: [UPDATE])
+  ownedProjects: [Project!]!
+          @relationship(type: "OWNS", direction: OUT)
+  contributedProjects: [Project!]!
+          @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
+  tasks: [Task!]!
+          @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
 }
 
+extend type User @auth(
+  rules: [
+    {
+      operations: [READ, UPDATE, DELETE]
+      allow: { id: "$jwt.sub" }
+    }
+  ]
+)
+
 interface Contributes @relationshipProperties {
-	since: DateTime
+  since: DateTime
 }
 
 type UserResponse {
- 	status: String!
-	data: UserResponseData
+  status: String!
+  data: UserResponseData
 }
 
 type AuthenticationResponse {
-	status: String!
-	data: String # JWT
+  status: String!
+  data: String # JWT
 }
 
 type UserResponseData {
-	id: ID!
-	username: String!
-	firstname: String!
-	lastname: String!
-	email: String!
-	createdAt: DateTime
-	updatedAt: DateTime
+  id: ID!
+  username: String!
+  firstname: String!
+  lastname: String!
+  email: String!
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type Mutation {
-	createUser(
-		username: String!
-		firstname: String
-		lastname: String
-		email: String!
-		password: String!
-	): UserResponse
+  createUser(
+      username: String!
+      firstname: String
+      lastname: String
+      email: String!
+      password: String!
+  ): UserResponse
 
-	updateUser(
-		id: ID!
-		username: String
-		firstname: String
-		lastname: String
-		email: String
-		password: String
-	): UserResponse
+  updateUser(
+    id: ID!
+    username: String
+    firstname: String
+    lastname: String
+    email: String
+    password: String
+  ): UserResponse
 
-	signIn(email: String!, password: String!): AuthenticationResponse
+  auth(email: String!, password: String!): AuthenticationResponse
 }
