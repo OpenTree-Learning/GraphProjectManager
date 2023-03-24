@@ -15,6 +15,7 @@ type Task {
 	id: ID @id
 	name: String!
 	description: String
+        creator: User!
 	createdAt: DateTime!
 		@timestamp(operations: [CREATE])
 	duration: Duration

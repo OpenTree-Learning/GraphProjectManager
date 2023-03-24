@@ -30,17 +30,17 @@ interface Contributes @relationshipProperties {
   since: DateTime
 }
 
-type UserResponse {
+type UserResponse @exclude {
   status: String!
   data: UserResponseData
 }
 
-type AuthenticationResponse {
+type AuthenticationResponse @exclude {
   status: String!
   data: String # JWT
 }
 
-type UserResponseData {
+type UserResponseData @exclude {
   id: ID!
   username: String!
   firstname: String!
