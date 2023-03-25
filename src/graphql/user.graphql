@@ -6,28 +6,26 @@ type User {
   email: String!
   password: String!
   createdAt: DateTime
-          @timestamp(operations: [CREATE])
+    @timestamp(operations: [CREATE])
   updatedAt: DateTime
-          @timestamp(operations: [UPDATE])
-  ownedProjects: [Project!]!
-          @relationship(type: "OWNS", direction: OUT)
-  contributedProjects: [Project!]!
-          @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
+    @timestamp(operations: [UPDATE])
+  projects: [Project!]!
+    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
   tasks: [Task!]!
-          @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
+    @relationship(type: "ASSIGNED_TO", properties: "AssignedTo", direction: OUT)
 }
 
-extend type User @auth(
-  rules: [
-    {
-      operations: [READ, UPDATE, DELETE]
-      allow: { id: "$jwt.sub" }
-    }
-  ]
-)
+enum UserRole {
+  OWNER,
+  MODERATOR,
+  CONTRIBUTOR,
+  GUEST
+}
 
 interface Contributes @relationshipProperties {
-  since: DateTime
+  role: UserRole!
+  since: DateTime!
+    @timestamp(operations: [CREATE])
 }
 
 type UserResponse @exclude {

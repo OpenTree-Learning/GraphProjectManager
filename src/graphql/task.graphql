@@ -23,7 +23,13 @@ type Task {
 	priorityOrder: PriorityOrder
 	state: State
 	primitives: [Task!]! 
-		@relationship(type: "DEPENDS_ON", direction: OUT)
-	contributors: [User!]! 
-		@relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
+	  @relationship(type: "DEPENDS_ON", direction: OUT)
+        assignedUsers: [User!]!
+          @relationship(type: "ASSIGNED_TO", properties: "AssignedTo", direction: OUT)
 }
+
+interface AssignedTo {
+  by: User!
+  since: DateTime!
+    @timestamp(operations: [CREATE])
+}²
