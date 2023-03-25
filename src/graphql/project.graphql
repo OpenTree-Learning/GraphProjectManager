@@ -1,11 +1,11 @@
 type Project {
-	id: ID @id
-	name: String!
-	description: String
-	createdAt: DateTime!
-		@timestamp(operations: [CREATE])
-	contributors: [User!]! 
-		@relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
-	tasks: [Task!]! 
-		@relationship(type: "DEPENDS_ON", direction: OUT)
+  id: ID @id
+  name: String!
+  description: String
+  createdAt: DateTime!
+    @timestamp(operations: [CREATE])
+  contributors: [User!]! 
+    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
+  tasks: [Task!]! 
+    @relationship(type: "DEPENDS_ON", direction: OUT)
 }

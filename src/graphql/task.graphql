@@ -1,35 +1,29 @@
 enum PriorityOrder {
-	LOW,
-	NORMAL,
-	HIGH,
-	URGENT
+  LOW,
+  NORMAL,
+  HIGH,
+  URGENT
 }
 
 enum State {
-	TODO,
-	DOING,
-	DONE
+  TODO,
+  DOING,
+  DONE
 }
 
 type Task {
-	id: ID @id
-	name: String!
-	description: String
-        creator: User!
-	createdAt: DateTime!
-		@timestamp(operations: [CREATE])
-	duration: Duration
-	labels: [String]
-	priorityOrder: PriorityOrder
-	state: State
-	primitives: [Task!]! 
-	  @relationship(type: "DEPENDS_ON", direction: OUT)
-        assignedUsers: [User!]!
-          @relationship(type: "ASSIGNED_TO", properties: "AssignedTo", direction: OUT)
-}
-
-interface AssignedTo {
-  by: User!
-  since: DateTime!
-    @timestamp(operations: [CREATE])
+  id: ID @id
+  name: String!
+  description: String
+  creator: User!
+  createdAt: DateTime!
+          @timestamp(operations: [CREATE])
+  duration: Duration
+  labels: [String]
+  priorityOrder: PriorityOrder
+  state: State
+  primitives: [Task!]! 
+    @relationship(type: "DEPENDS_ON", direction: OUT)
+  assignedUsers: [User!]!
+    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
 }

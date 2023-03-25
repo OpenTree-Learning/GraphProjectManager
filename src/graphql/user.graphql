@@ -12,18 +12,10 @@ type User {
   projects: [Project!]!
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
   tasks: [Task!]!
-    @relationship(type: "ASSIGNED_TO", properties: "AssignedTo", direction: OUT)
-}
-
-enum UserRole {
-  OWNER,
-  MODERATOR,
-  CONTRIBUTOR,
-  GUEST
+    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
 }
 
 interface Contributes @relationshipProperties {
-  role: UserRole!
   since: DateTime!
     @timestamp(operations: [CREATE])
 }
@@ -50,11 +42,11 @@ type UserResponseData @exclude {
 
 type Mutation {
   createUser(
-      username: String!
-      firstname: String
-      lastname: String
-      email: String!
-      password: String!
+    username: String!
+    firstname: String
+    lastname: String
+    email: String!
+    password: String!
   ): UserResponse
 
   updateUser(
