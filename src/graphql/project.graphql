@@ -4,7 +4,13 @@ type Project {
   description: String
   createdAt: DateTime!
     @timestamp(operations: [CREATE])
-  contributors: [User!]! 
+  owner: User
+    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
+  moderators: [User!]!
+    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
+  contributors: [User!]!
+    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
+  guests: [User!]!
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
   tasks: [Task!]! 
     @relationship(type: "DEPENDS_ON", direction: OUT)

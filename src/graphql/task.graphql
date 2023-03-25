@@ -26,4 +26,9 @@ type Task {
     @relationship(type: "DEPENDS_ON", direction: OUT)
   assignedUsers: [User!]!
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
+  rootProject: Project!
+    @cypher(statement: """
+      MATCH (p:Project)-[:DEPENDS_ON*]->(this)
+      RETURN p
+    """)
 }
