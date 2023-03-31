@@ -1,0 +1,111 @@
+mutation CreateProject {
+  createProjects(
+    input: {
+      name: "Graph Project Manager"
+      description: "Graph Project Manager est un outil de gestion de projet basé sur un graphe."
+      owners: {
+        connect: {
+          where: {
+            node: {
+              id: "e3dfefa9-30d3-4507-bbb6-950842d80c8d"
+            }
+          }
+        }
+      }
+      moderators: {
+        connect: {
+          where: {
+            node: {
+              id: "25573ff4-b87d-47b3-be06-6be296c62e64"
+            }
+          }
+        }
+      }
+      contributors: {
+        connect: {
+          where: {
+            node: {
+              id: "fcdfc66b-2ccf-4655-9d9f-328ca0bbede6"
+            }
+          }
+        }
+      }
+      guests: {
+        connect: {
+          where: {
+            node: {
+              id: "3cbf28ba-97eb-4d27-98f7-135d3dfaf7e9"
+            }
+          }
+        }
+      }
+      tasks: {
+        create: {
+          node: {
+            name: "Créer le repo GitHub"
+            description: "On a besoin de créer un reository GitHub pour héberger le code source et tenir un historique des modifications."
+            labels: ["tech"]
+            priorityOrder: NORMAL
+            state: TODO
+            primitives: {
+              create: {
+                node: {
+                  name: "Apprendre à utiliser Git"
+                  description: "Certaines personnes de la team n'ont jamais utilisé Git de leur vie."
+                  labels: ["tech", "learning"]
+                  priorityOrder: HIGH
+                  state: TODO
+                  assignedUsers: {
+                    connect: {
+                      where: {
+                        node: {
+                          id: "3cbf28ba-97eb-4d27-98f7-135d3dfaf7e9"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            assignedUsers: {
+              connect: {
+                where: {
+                  node: {
+                    id: "e3dfefa9-30d3-4507-bbb6-950842d80c8d"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ) {
+    projects {
+      id
+      name
+      description
+      createdAt
+      owners {
+        id
+        username
+      }
+      moderators {
+        id
+        username
+      }
+      contributors {
+        id
+        username
+      }
+      guests {
+        id
+        username
+      }
+      tasks {
+        name
+        description
+      }
+    }
+  }
+}

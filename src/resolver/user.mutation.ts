@@ -2,8 +2,10 @@ import * as neo4j from 'neo4j-driver';
 import bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
-import { Context } from '../types';
+import { Context  } from '../types';
+import { NodeTypes } from './types';
 import { MutationResponse } from './types';
+import { BasicQuery } from './query.utils';
 
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
@@ -154,12 +156,27 @@ async function auth(
 	};
 }
 
+//async function projectAuth(
+//	parent: any, 
+//	args: { id: string }, 
+//	context: Context
+//) {
+//	const projects = await new BasicQuery(context.driver)
+//				.getNodes(NodeTypes.PROJECT)
+//				.where({id: "95418358-7fa1-49b0-a94a-3f72cafae2e6"})
+//				.execute();
+//
+//	console.log(projects);
+//
+//}
+
 
 const resolvers = {
 	Mutation: {
 		createUser,
 		updateUser,
-		auth
+		auth,
+		//projectAuth
 	}
 };
 

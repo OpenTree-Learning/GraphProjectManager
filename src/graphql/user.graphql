@@ -15,7 +15,15 @@ type User {
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
 }
 
+enum UserRole {
+  OWNER,
+  MODERATOR,
+  CONTRIBUTOR,
+  GUEST
+}
+
 interface Contributes @relationshipProperties {
+  as: UserRole
   since: DateTime!
     @timestamp(operations: [CREATE])
 }
@@ -59,4 +67,5 @@ type Mutation {
   ): UserResponse
 
   auth(email: String!, password: String!): AuthenticationResponse
+  projectAuth(id: ID!): AuthenticationResponse
 }

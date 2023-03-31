@@ -4,14 +4,43 @@ type Project {
   description: String
   createdAt: DateTime!
     @timestamp(operations: [CREATE])
-  owner: User
-    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
-  moderators: [User!]!
-    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
   contributors: [User!]!
-    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
-  guests: [User!]!
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
   tasks: [Task!]! 
     @relationship(type: "DEPENDS_ON", direction: OUT)
+  role: UserRole!
+    @cypher(statement: """
+      MATCH (:User {id: $auth.jwt.sub})-[r:CONTRIBUTES]->(this)
+      RETURN r.as AS role
+    """)
 }
+
+#extend type Project @auth(
+#  rules: [
+#    {
+#      operations: [READ, UPDATE, DELETE, CONNECT, DISCONNECT]
+#      allow: {
+#        role: OWNER
+#      }
+#    }
+#    {
+#      operations: [READ, CONNECT, DISCONNECT]
+#      allow: {
+#        OR: [
+#          {
+#            role: MODERATOR
+#          }
+#          {
+#            role: CONTRIBUTOR
+#          }
+#        ]
+#      }
+#    }
+#    {
+#      operations: [READ]
+#      allow: {
+#        role: GUEST
+#      }
+#    }
+#  ]
+#)
