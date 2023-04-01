@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
 import { Context  } from '../types';
-import { EdgeTypes, NodeTypes } from './types';
 import { MutationResponse } from './types';
 import { BasicQuery } from './query.utils';
 
@@ -156,40 +155,52 @@ async function auth(
 	};
 }
 
-//async function projectAuth(
-//	parent: any, 
-//	args: { id: string }, 
-//	context: Context
-//) {
-//	const token: string = (context.req.get('Authorization') as string).replace('Bearer ', '');
-//	const secret: string = process.env.JWT_SECRET as string;
-//	let decodedToken: jwt.JwtPayload | string = {};
-//
-//	try {
-//		decodedToken = jwt.verify(token, secret);
-//	} catch (err) {
-//		return {
-//			status: 'Failed to verify jwt.',
-//			data: null
-//		};
-//	}
-//
-//	console.log({token, decodedToken});
-//
-//	const edge = await new BasicQuery(context.driver)
-//			.getEdges('CONTRIBUTES', ['Project', 'User'])
-//			.where([{id: args.id}, undefined, {id: decodedToken.sub}])
-//			.execute();
-//
-//	console.log(edge);
-//
-//	const user = await new BasicQuery(context.driver)
-//			.getNodes('User')
-//			.where([{firstname: "Mr. "}])
-//			.execute();
-//	
-//	console.log(user);
-//}
+async function projectAuth(
+	parent: any, 
+	args: { id: string }, 
+	context: Context
+) {
+	const authHeader = context.req.get('Authorization');
+
+	if (!authHeader) {
+		return {
+			status: 'User not authenticated',
+			data: null
+		};
+	}
+
+	const token = authHeader.replace('Bearer ', '');
+	const secret: string = process.env.JWT_SECRET as string;
+	let decodedToken: jwt.JwtPayload | string = {};
+
+	try {
+		decodedToken = jwt.verify(token, secret);
+	} catch (err) {
+		return {
+			status: 'Failed to verify jwt.',
+			data: null
+		};
+	}
+
+	const edge = await new BasicQuery(context.driver)
+			.getEdges('CONTRIBUTES', ['Project', 'User'])
+			.where([{id: args.id}, undefined, {id: decodedToken.sub}])
+			.execute();
+	
+	const userRole = edge[0].properties.as;
+
+	const roleTokenPayload = {
+		sub: decodedToken.sub,
+		roles: userRole
+	};
+
+	const roleToken = jwt.sign(roleTokenPayload, secret);
+
+	return {
+		status: 'User successfully authenticated to the project',
+		data: roleToken
+	};
+}
 
 
 const resolvers = {
@@ -197,7 +208,7 @@ const resolvers = {
 		createUser,
 		updateUser,
 		auth,
-		//projectAuth
+		projectAuth
 	}
 };
 

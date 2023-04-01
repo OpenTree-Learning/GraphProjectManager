@@ -1,17 +1,5 @@
 import * as neo4j from 'neo4j-driver';
-
-
-type NodeLabels = "User" | "Project" | "Task";
-type EdgeTypes = "CONTRIBUTES" | "DEPENDS_ON";
-
-type Label = `:${NodeLabels | EdgeTypes}`;
-
-
-type Parameter = `${string}_${number}`;
-type ParameterObject = Record<Parameter, any>
-
-type InputFilter = Record<string, any>
-type Filter = `${string}: $${Parameter}`;
+import { NodeLabels, EdgeTypes, Label, Parameter, ParameterObject, InputFilter, Filter } from './types';
 
 
 export class BasicQuery {

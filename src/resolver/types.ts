@@ -3,24 +3,14 @@ export interface MutationResponse {
 	data: any
 }
 
-export enum NodeTypes {
-	USER = 'User',
-	PROJECT = 'Project',
-	TASK = 'Task'
-}
+export type NodeLabels = "User" | "Project" | "Task";
+export type EdgeTypes = "CONTRIBUTES" | "DEPENDS_ON";
 
-export enum EdgeTypes {
-	CONTRIBUTES = 'CONTRIBUTES',
-	DEPENDS_ON = 'DEPENDS_ON'
-}
+export type Label = `:${NodeLabels | EdgeTypes}`;
 
-export interface JwtPayload {
-    [key: string]: any;
-    iss?: string | undefined;
-    sub?: string | undefined;
-    aud?: string | string[] | undefined;
-    exp?: number | undefined;
-    nbf?: number | undefined;
-    iat?: number | undefined;
-    jti?: string | undefined;
-}
+
+export type Parameter = `${string}_${number}`;
+export type ParameterObject = Record<Parameter, any>
+
+export type InputFilter = Record<string, any>
+export type Filter = `${string}: $${Parameter}`;
