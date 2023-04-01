@@ -31,3 +31,22 @@ extend type Project @auth(
     }
   ]
 )
+
+type ProjectResponseData @exclude {
+  id: ID!
+  name: String!
+  description: String!
+  createdAt: DateTime!
+}
+
+type ProjectResponse @exclude {
+  status: String!
+  data: ProjectResponseData!
+}
+
+type Mutation {
+  createProject(
+    name: String!
+    description: String!
+  ): ProjectResponse
+}

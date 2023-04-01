@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 
 import { Context  } from '../types';
 import { MutationResponse } from './types';
-import { BasicQuery } from './query.utils';
+import { BasicQuery } from '../utils/query.utils';
 
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
@@ -93,7 +93,7 @@ async function updateUser(
 
 		if (usersWithEmail.length > 0) {
 			return {
-				status: 'Email already taken',
+				status: 'Email already taken.',
 				data: null
 			};
 		}
@@ -112,7 +112,7 @@ async function updateUser(
 	}
 
 	const setQuery = Object.keys(args).map(k => `set u.${k} = $${k}`).join('\n');
-	const query = `match (u:User {id: $id})\n${setQuery}\nreturn u`;
+	const query = `MATCH (u:User {id: $id})\n${setQuery}\nRETURN u`;
 
 	const result = await driver.executeQuery(query, args);
 
@@ -125,7 +125,7 @@ async function auth(
 	args: { email: string, password: string }, 
 	context: Context
 ) {
-	const invalidIDs = 'Invalid email or password';
+	const invalidIDs = 'Invalid email or password.';
 
 	const driver: neo4j.Driver = context.driver;
 	const usersWithEmail = await getUserBy({email: args.email}, driver)
@@ -150,7 +150,7 @@ async function auth(
 	const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET as string);
 
 	return {
-		status: 'User successfully authenticated',
+		status: 'User successfully authenticated.',
 		data: token
 	};
 }
@@ -164,7 +164,7 @@ async function projectAuth(
 
 	if (!authHeader) {
 		return {
-			status: 'User not authenticated',
+			status: 'User not authenticated.',
 			data: null
 		};
 	}
@@ -197,7 +197,7 @@ async function projectAuth(
 	const roleToken = jwt.sign(roleTokenPayload, secret);
 
 	return {
-		status: 'User successfully authenticated to the project',
+		status: 'User successfully authenticated to the project.',
 		data: roleToken
 	};
 }
