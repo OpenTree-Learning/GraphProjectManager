@@ -31,3 +31,20 @@ type Task {
       RETURN p
     """)
 }
+
+extend type Task @auth(
+  rules: [
+    {
+      operations: [CREATE, READ, UPDATE, DELETE, CONNECT, DISCONNECT],
+      roles: ["OWNER", "MODERATOR"]
+    }
+    {
+      operations: [READ, CONNECT, DISCONNECT],
+      roles: ["CONTRIBUTOR"]
+    }
+    {
+      operations: [READ],
+      roles: ["GUEST"]
+    }
+  ]
+)
