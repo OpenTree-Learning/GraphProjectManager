@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
 import { Context  } from '../types';
-import { NodeTypes } from './types';
+import { EdgeTypes, NodeTypes } from './types';
 import { MutationResponse } from './types';
 import { BasicQuery } from './query.utils';
 
@@ -161,13 +161,34 @@ async function auth(
 //	args: { id: string }, 
 //	context: Context
 //) {
-//	const projects = await new BasicQuery(context.driver)
-//				.getNodes(NodeTypes.PROJECT)
-//				.where({id: "95418358-7fa1-49b0-a94a-3f72cafae2e6"})
-//				.execute();
+//	const token: string = (context.req.get('Authorization') as string).replace('Bearer ', '');
+//	const secret: string = process.env.JWT_SECRET as string;
+//	let decodedToken: jwt.JwtPayload | string = {};
 //
-//	console.log(projects);
+//	try {
+//		decodedToken = jwt.verify(token, secret);
+//	} catch (err) {
+//		return {
+//			status: 'Failed to verify jwt.',
+//			data: null
+//		};
+//	}
 //
+//	console.log({token, decodedToken});
+//
+//	const edge = await new BasicQuery(context.driver)
+//			.getEdges('CONTRIBUTES', ['Project', 'User'])
+//			.where([{id: args.id}, undefined, {id: decodedToken.sub}])
+//			.execute();
+//
+//	console.log(edge);
+//
+//	const user = await new BasicQuery(context.driver)
+//			.getNodes('User')
+//			.where([{firstname: "Mr. "}])
+//			.execute();
+//	
+//	console.log(user);
 //}
 
 

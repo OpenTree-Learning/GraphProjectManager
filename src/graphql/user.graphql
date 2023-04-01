@@ -67,5 +67,5 @@ type Mutation {
   ): UserResponse
 
   auth(email: String!, password: String!): AuthenticationResponse
-  projectAuth(id: ID!): AuthenticationResponse
+  #projectAuth(id: ID!): AuthenticationResponse
 }
