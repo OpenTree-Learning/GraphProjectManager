@@ -15,32 +15,19 @@ type Project {
     """)
 }
 
-#extend type Project @auth(
-#  rules: [
-#    {
-#      operations: [READ, UPDATE, DELETE, CONNECT, DISCONNECT]
-#      allow: {
-#        role: OWNER
-#      }
-#    }
-#    {
-#      operations: [READ, CONNECT, DISCONNECT]
-#      allow: {
-#        OR: [
-#          {
-#            role: MODERATOR
-#          }
-#          {
-#            role: CONTRIBUTOR
-#          }
-#        ]
-#      }
-#    }
-#    {
-#      operations: [READ]
-#      allow: {
-#        role: GUEST
-#      }
-#    }
-#  ]
-#)
+extend type Project @auth(
+  rules: [
+    {
+      operations: [READ, UPDATE, DELETE, CONNECT, DISCONNECT],
+      roles: ["OWNER"]
+    }
+    {
+      operations: [READ, CONNECT, DISCONNECT],
+      roles: ["MODERATOR", "CONTRIBUTOR"]
+    }
+    {
+      operations: [READ],
+      roles: ["GUEST"]
+    }
+  ]
+)
