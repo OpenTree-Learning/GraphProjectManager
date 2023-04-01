@@ -15,6 +15,17 @@ type User {
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
 }
 
+extend type User @auth(
+  rules: [
+    {
+      operations: [CREATE, READ, UPDATE, DELETE, CONNECT, DISCONNECT]
+      allow: {
+        id: "$jwt.sub"
+      }
+    }
+  ]
+)
+
 enum UserRole {
   OWNER,
   MODERATOR,
