@@ -1,0 +1,12 @@
+@import "./style/variables/colors.css";
+
+
+body {
+	background-color: var(--background-color);
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+body, input, textarea, button {
+	font-family: 'Montserrat', sans-serif;
+}
