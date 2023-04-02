@@ -19,7 +19,7 @@ extend type User @auth(
   rules: [
     {
       operations: [CREATE, READ, UPDATE, DELETE, CONNECT, DISCONNECT]
-      allow: {
+      where: {
         id: "$jwt.sub"
       }
     }
