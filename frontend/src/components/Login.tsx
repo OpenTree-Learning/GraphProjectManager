@@ -1,6 +1,11 @@
 import {ReactElement, useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+
+import { notify } from '../utils/notify';
 import ClipLoader from 'react-spinners/ClipLoader';
 import styles from '../style/login.module.css';
+import { AUTH } from '../graphql/auth';
 
 
 interface LoginProps {
@@ -12,9 +17,32 @@ function Login (props: LoginProps): ReactElement {
 	const [password, setPassword] = useState<string>('');
 	const [loginError, setLoginError] = useState<string>('');
 
-	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
+
+	const [auth, { data, loading, error }] = useMutation(AUTH);
+
 
 	const handleSubmit = () => {
+		auth({ variables: { 
+			email: login,
+			password: password
+		}})
+		.then(res => {
+			const { data } = res;
+			const status = data.auth.status;
+			const token = data.auth.data;
+			
+			if (token !== null) {
+				localStorage.setItem('user', token);
+				notify(status, 'success');
+				props.onLoginSuccess();
+			} else {
+				notify(status, 'error');
+			}
+		})
+		.catch(err => {
+			notify(err.message, 'error');
+		})
 	};
 
 	return (
