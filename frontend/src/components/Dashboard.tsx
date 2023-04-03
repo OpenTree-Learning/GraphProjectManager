@@ -38,9 +38,9 @@ function Dashboard (props: DashboardProps): ReactElement {
 		let projects: Project [] = user.projects;
 
 		projects = projects.map((project: Project) => ({
-			name: project.name,
+			name: cutString(project.name, 30),
 			description: cutString(project.description, 100),
-			role: capitalize(cutString(project.role, 30))
+			role: capitalize(project.role)
 		}));
 		setProjects(projects);
 		setMe(user as User);
