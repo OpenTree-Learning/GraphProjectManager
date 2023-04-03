@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
-import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';

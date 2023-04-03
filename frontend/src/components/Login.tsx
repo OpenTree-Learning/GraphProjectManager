@@ -1,11 +1,11 @@
-import {ReactElement, useState} from 'react';
+import { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import { notify } from '../utils/notify';
 import ClipLoader from 'react-spinners/ClipLoader';
 import styles from '../style/login.module.css';
-import { AUTH } from '../graphql/auth';
+import { AUTH } from '../graphql/Login/auth';
 
 
 interface LoginProps {

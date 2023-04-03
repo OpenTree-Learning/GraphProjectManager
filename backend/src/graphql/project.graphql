@@ -29,6 +29,14 @@ extend type Project @auth(
       operations: [READ],
       roles: ["GUEST"]
     }
+    {
+      operations: [READ],
+      allow: {
+        contributors: {
+          id: "$jwt.sub"
+        }
+      }
+    }
   ]
 )
 

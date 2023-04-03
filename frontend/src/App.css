@@ -3,8 +3,9 @@
 
 body {
 	background-color: var(--background-color);
-	padding: 0 !important;
+	overflow: hidden;
 	margin: 0 !important;
+	padding: 0 !important;
 }
 
 body, input, textarea, button {

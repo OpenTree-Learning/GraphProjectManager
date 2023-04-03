@@ -1,5 +1,7 @@
 :root {
 	--background-color: #161616;
+	--second-background-color: #0d1117;
+	--third-background-color: #161b22;
 	/*
 	--first-color: #eaf3f6;
 	--second-color: #b4caca;
@@ -9,9 +11,22 @@
 	--second-color: #d9e4e4;
 	--third-color: #bccdcd;
 
+	--logout-button-color: #c52400;
+
+	--first-text-color: #c9d1d9;
+
+	--first-link-color: #58a6ff;
+
+	--first-border-color: #30363d;
+
 	--action-first-color: #4b86e8;
 	--action-second-color: #1B4055;
 
 	--error-first-color: #dd4b39;
 	--error-second-color: #c23321;
+
+	--role-owner-color: #c52400;
+	--role-moderator-color: #1b691e;
+	--role-contributor-color: #074270;
+	--role-guest-color: #575757;
 }
