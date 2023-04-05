@@ -6,3 +6,8 @@ export interface Context {
 	req: express.Request,
 	driver: neo4j.Driver
 };
+
+export enum NodeEnv {
+	PRODUCTION = 'production',
+	DEVELOPMENT = 'development'
+};
