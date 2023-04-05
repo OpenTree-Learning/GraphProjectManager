@@ -39,16 +39,21 @@ function createResponse(dbResult: any, status: string) {
 	};
 }
 
-
 async function createUser(
 	parent: any, 
 	args: { username: string, firstname: string, lastname: string, email: string, password: string }, 
 	context: Context
 ): Promise<MutationResponse> {
-	const driver: neo4j.Driver = context.driver;
-	const usersWithEmail = await getUserBy({email: args.email}, driver)
+	const { ogm }: { ogm: OGM<any> } = context;
+	const user = ogm.model('User');
 
-	if (usersWithEmail.length > 0) {
+	const matchingUser = await user.find({
+		where: {
+			email: args.email
+		}
+	});
+
+	if (matchingUser.length > 0) {
 		return {
 			status: 'User already exists',
 			data: null
@@ -62,24 +67,22 @@ async function createUser(
 		};
 	}
 
-	const result = await driver.executeQuery(`
-		create (u:User {
-			id: apoc.create.uuid(),
-			username: $username, 
-			firstname: $firstname,
-			lastname: $lastname,
-			email: $email, 
-			password: $password, 
-			createdAt: datetime(), 
-			updatedAt: datetime()
-		 }) return u
-		`, {
-			...args,
-			password: hashPassword(10, args.password)
-		}
-	);
+	const { users } = await user.create({
+		input: [
+			{
+				username: args.username, 
+				firstname: args.firstname,
+				lastname: args.lastname,
+				email: args.email, 
+				password: hashPassword(10, args.password), 
+			}
+		]
+	});
 
-	return createResponse(result, 'User successfully created');
+	return {
+		status: 'User successfully created',
+		data: users[0]
+	};
 }
 
 async function updateUser(
