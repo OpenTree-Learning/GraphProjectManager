@@ -5,6 +5,8 @@ import * as jwt from 'jsonwebtoken';
 import { Context  } from '../types';
 import { MutationResponse } from './types';
 import { BasicQuery } from '../utils/query.utils';
+import {OGM} from '@neo4j/graphql-ogm';
+import logger from '../logger';
 
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
@@ -119,39 +121,40 @@ async function updateUser(
 	return createResponse(result, 'User successfully updated!');
 }
 
-
 async function auth(
 	parent: any, 
 	args: { email: string, password: string }, 
 	context: Context
 ) {
 	const invalidIDs = 'Invalid email or password.';
+	const { ogm }: { ogm: OGM<any> } = context;
+	const user = ogm.model('User');
 
-	const driver: neo4j.Driver = context.driver;
-	const usersWithEmail = await getUserBy({email: args.email}, driver)
+	const [ matchingUser ] = await user.find({
+		where: {
+			email: args.email
+		}
+	});
 
-	if (usersWithEmail.length === 0) {
+	if (!matchingUser) {
 		return {
 			status: invalidIDs,
 			data: null
 		};
 	}
 
-	const user = usersWithEmail[0].get('u').properties;
-	const hashedPassword  = user.password;
+	const { password } = matchingUser;
 
-	if (!bcrypt.compareSync(args.password, hashedPassword)) {
+	if (!bcrypt.compareSync(args.password, password)) {
 		return {
 			status: invalidIDs,
-		       	data: null	
-		}
+			data: null
+		};
 	}
-
-	const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET as string);
 
 	return {
 		status: 'User successfully authenticated.',
-		data: token
+		data: jwt.sign({ sub: user.id }, process.env.JWT_SECRET as string)
 	};
 }
 

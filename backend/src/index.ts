@@ -1,40 +1,52 @@
 import { Neo4jGraphQL } from '@neo4j/graphql';
+import { OGM } from '@neo4j/graphql-ogm';
 import { Neo4jGraphQLAuthJWTPlugin } from '@neo4j/graphql-plugin-auth';
 import { ApolloServer } from 'apollo-server';
 import { loadFiles } from 'graphql-import-files';
 import * as express from 'express';
-import * as neo4j from 'neo4j-driver';
 
 import loadSecrets from './database/secret';
 import createDriver from './database/driver';
 import resolvers from './resolver';
-import { Context, NodeEnv } from './types';
+import { Context, NodeEnv, NodeEnvType } from './types';
 import * as dotenv from 'dotenv';
 import logger from './logger';
 import path from 'path';
 
 
-const nodeEnv = process.env.NODE_ENV;
-const envFilePath = (ext: string): string => path.resolve(process.cwd(), `.env.${ext}`);
+const configExt = {
+	[NodeEnv.DEVELOPMENT]: 'dev', 
+	[NodeEnv.PRODUCTION]: 'prod'
+};
 
-
-if (nodeEnv === NodeEnv.DEVELOPMENT) {
-	dotenv.config({path: envFilePath('dev')});
-	startServer();
-} else if (nodeEnv === NodeEnv.PRODUCTION) {
-	dotenv.config({path: envFilePath('prod')});
-	loadSecrets().then(startServer);
+const instance = {
+	[NodeEnv.DEVELOPMENT]: () => createServer(),
+	[NodeEnv.PRODUCTION]: () => loadSecrets().then(createServer)
 }
 
+const nodeEnv = process.env.NODE_ENV;
 
-async function startServer () {
+
+if (Object.values(NodeEnv).includes(nodeEnv as NodeEnv)) {
+	const env = nodeEnv as NodeEnvType;
+	const ext = `.env.${configExt[env]}`;
+	const startServer = instance[env];
+
+	dotenv.config({
+		path: path.resolve(process.cwd(), ext)
+	});
+	startServer();
+}
+
+async function createServer () {
 	logger.info('Connecting to database...');
 
 	const username = process.env.DATABASE_USERNAME as string;
 	const password = process.env.DATABASE_PASSWORD as string;
 
-	const driver = await createDriver(username, password);
+	const driver = createDriver(username, password);
 	const typeDefs = loadFiles('**/graphql/*.graphql')
+	const ogm = new OGM({ typeDefs, driver });
 
 	const neoSchema = new Neo4jGraphQL({
 		typeDefs,
@@ -46,21 +58,20 @@ async function startServer () {
 			})
 		}
 	});
-	const schema = await neoSchema.getSchema();
-	const server = new ApolloServer({
-		schema, 
-		context: ({ req }: { req: express.Request }): Context => {
-			return {
+
+	await Promise.all([neoSchema.getSchema(), ogm.init()]).then(([schema]) => {
+		const server = new ApolloServer({
+			schema,
+			context: ({ req }: { req: express.Request }): Context => ({
 				req,
+				ogm,
 				driver
-			};
-		}
-	});
+			})
+		});
 
-	logger.info('Connected to database!');
-
-	server.listen().then(({ url }) => {
-		logger.info('\n\n');
-		logger.info(`🚀 Server ready at ${url} 🚀 `);
+		server.listen().then(({ url }) => {
+			logger.info('\n\n');
+			logger.info(`🚀 Server ready at ${url} 🚀 `);
+		});
 	});
 }
