@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: graphprojectmanager_frontend
+    build: ./frontend
+    command: npm run start
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend:
+    container_name: graphprojectmanager_backend
+    build: ./backend
+    command: npm run start:dev
+    environment:
+      - DB_PORT=7687
+      - NODE_ENV=development
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+   
+  db:
+    container_name: graphprojectmanager_database
+    image: neo4j:5.6.0
+    environment:
+      - NEO4J_dbms_ssl_policy_bolt_client__auth=none
+      - NEO4J_dbms_ssl_policy_https_client__auth=none
+      - NEO4J_AUTH=none
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_dbms_ssl_policy_https_enabled=false
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_PLUGINS=["apoc"]
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4jdb:/data
+      - neo4jdb:/logs
+      - neo4jdb:/plugins
+
+volumes:
+  neo4jdb:
+

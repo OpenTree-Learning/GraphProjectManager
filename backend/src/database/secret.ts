@@ -15,8 +15,6 @@ async function unseal (client: vault.client, keys: Array<string>, shares: number
 }
 
 async function loadSecrets (): Promise<void> {
-	dotenv.config();
-
 	const options = {
 		apiVersion: 'v1',
 		endpoint: 'https://0.0.0.0:8200',

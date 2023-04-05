@@ -12,8 +12,8 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]
 
 async function getUserBy(by: any, driver: neo4j.Driver): Promise<any> {
 	const matchQuery = Object.keys(by).map(k => `${k}: $${k}`).join(',');
+	
 	const query = `match (u:User {${matchQuery}}) return u`;
-
 	const { records } = await driver.executeQuery(query, by);
 
 	return records;
