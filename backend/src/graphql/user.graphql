@@ -69,7 +69,6 @@ type Mutation {
   ): UserResponse
 
   updateUser(
-    id: ID!
     username: String
     firstname: String
     lastname: String
