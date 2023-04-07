@@ -4,9 +4,7 @@ import * as jwt from 'jsonwebtoken';
 
 import { Context  } from '../types';
 import { MutationResponse } from './types';
-import { BasicQuery } from '../utils/query.utils';
 import {OGM} from '@neo4j/graphql-ogm';
-import logger from '../logger';
 
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
@@ -149,7 +147,7 @@ async function auth(
 
 	return {
 		status: 'User successfully authenticated.',
-		data: jwt.sign({ sub: user.id }, process.env.JWT_SECRET as string)
+		data: jwt.sign({ sub: matchingUser.id }, process.env.JWT_SECRET as string)
 	};
 }
 
@@ -158,6 +156,8 @@ async function projectAuth(
 	args: { id: string }, 
 	context: Context
 ) {
+	const { ogm }: { ogm: OGM<any> } = context;
+	const user = ogm.model('User');
 	const authHeader = context.req.get('Authorization');
 
 	if (!authHeader) {
@@ -180,18 +180,27 @@ async function projectAuth(
 		};
 	}
 
-	const edge = await new BasicQuery(context.driver)
-			.getEdges('CONTRIBUTES', ['Project', 'User'])
-			.where([{id: args.id}, undefined, {id: decodedToken.sub}])
-			.execute();
-	
-	const userRole = edge[0].properties.as;
+	const [ users ] = await user.find({
+		where: {
+			projects: {
+				id: args.id
+			}
+		},
+		selectionSet: '{projectsConnection {edges {as}}}'
+	});
 
+	if (!users) {
+		return {
+			status: 'Project does not exist.',
+			data: null
+		};
+	}
+
+	const [ role ] = users.projectsConnection.edges;
 	const roleTokenPayload = {
 		sub: decodedToken.sub,
-		roles: userRole
+		roles: role.as
 	};
-
 	const roleToken = jwt.sign(roleTokenPayload, secret);
 
 	return {
