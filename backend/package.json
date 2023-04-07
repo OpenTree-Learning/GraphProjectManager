@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@neo4j/graphql": "^3.17.1",
+    "@neo4j/graphql-ogm": "^3.17.2",
     "@neo4j/graphql-plugin-auth": "^2.1.0",
     "@ptkdev/logger": "^1.8.0",
     "apollo-server": "^3.12.0",

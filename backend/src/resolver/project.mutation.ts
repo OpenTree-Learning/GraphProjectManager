@@ -1,3 +1,5 @@
+import { OGM } from '@neo4j/graphql-ogm';
+
 import { Context  } from '../types';
 import { verifyJwt } from '../utils/jwt_verify.utils';
 
@@ -7,8 +9,9 @@ async function createProject(
 	args: { name: string, description: string },
 	context: Context
 ) {
+	const { ogm }: { ogm: OGM<any> } = context;
+	const project = ogm.model('Project');
 	let token;
-	const { driver } = context;
 
 	try {
 		token = await verifyJwt(context, process.env.JWT_SECRET as string);
@@ -19,35 +22,30 @@ async function createProject(
 		};
 	}
 
-	const query = `
-		MATCH (u:User {id: $jwt})
-		CREATE (p:Project {
-			id: apoc.create.uuid(),
-			name: $name, 
-			description: $description,
-			createdAt: datetime()
-		})
-		CREATE (u)-[r:CONTRIBUTES {as: "OWNER", since: datetime()}]->(p)
-		RETURN p
-	`
-	const parameters = {
-		jwt: token.sub,
-		...args,
-	}
-	let response;
-
-	try {
-		response = await driver.executeQuery(query, parameters);
-	} catch (err: any) {
-		return {
-			status: 'Failed to create project.',
-			data: null
-		};
-	}
+	const { projects } = await project.create({
+		input: [
+			{
+				name: args.name,
+				description: args.description,
+				contributors: {
+					connect: {
+				        	where: {
+				        		node:  {
+								id: token.sub
+				      			}
+				    		},
+						edge: {
+							as: "OWNER"
+						}
+				  	}
+				}
+			}
+		]
+	});
 
 	return {
 		status: 'Project successfully created.',
-		data: response.records[0].get('p').properties
+		data: projects[0]
 	};
 }
 
