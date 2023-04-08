@@ -18,24 +18,24 @@ type Project {
 extend type Project @auth(
   rules: [
     {
-      operations: [READ, UPDATE, DELETE, CONNECT, DISCONNECT],
-      roles: ["OWNER"]
-    }
-    {
-      operations: [READ, CONNECT, DISCONNECT],
-      roles: ["MODERATOR", "CONTRIBUTOR"]
-    }
-    {
-      operations: [READ],
-      roles: ["GUEST"]
-    }
-    {
       operations: [READ],
       where: {
         contributors: {
           id: "$jwt.sub"
         }
       }
+    },
+    {
+      operations: [READ, UPDATE, DELETE, CONNECT, DISCONNECT],
+      roles: ["OWNER"]
+    },
+    {
+      operations: [READ, CONNECT, DISCONNECT],
+      roles: ["MODERATOR", "CONTRIBUTOR"]
+    },
+    {
+      operations: [READ],
+      roles: ["GUEST"]
     }
   ]
 )
