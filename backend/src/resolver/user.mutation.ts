@@ -1,10 +1,11 @@
 import * as neo4j from 'neo4j-driver';
 import bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { OGM } from '@neo4j/graphql-ogm';
 
 import { Context  } from '../types';
 import { MutationResponse } from './types';
-import {OGM} from '@neo4j/graphql-ogm';
+import { verifyJwt } from '../utils/jwt_verify.utils';
 
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
@@ -68,24 +69,13 @@ async function updateUser(
 ): Promise<MutationResponse> {
 	const { ogm }: { ogm: OGM<any> } = context;
 	const user = ogm.model('User');
-	const authHeader = context.req.get('Authorization');
-
-	if (!authHeader) {
-		return {
-			status: 'User not authenticated.',
-			data: null
-		};
-	}
-
-	const token = authHeader.replace('Bearer ', '');
-	const secret: string = process.env.JWT_SECRET as string;
-	let decodedToken: jwt.JwtPayload | string = {};
+	let token;
 
 	try {
-		decodedToken = jwt.verify(token, secret);
-	} catch (err) {
+		token = await verifyJwt(context, process.env.JWT_SECRET as string);
+	} catch (err: any) {
 		return {
-			status: 'Failed to verify jwt.',
+			status: err.message,
 			data: null
 		};
 	}
@@ -103,7 +93,7 @@ async function updateUser(
 
 	const { users } = await user.update({
 		where: {
-			id: decodedToken.sub
+			id: token.sub
 		},
 		update: args
 	});
@@ -158,24 +148,14 @@ async function projectAuth(
 ) {
 	const { ogm }: { ogm: OGM<any> } = context;
 	const user = ogm.model('User');
-	const authHeader = context.req.get('Authorization');
-
-	if (!authHeader) {
-		return {
-			status: 'User not authenticated.',
-			data: null
-		};
-	}
-
-	const token = authHeader.replace('Bearer ', '');
 	const secret: string = process.env.JWT_SECRET as string;
-	let decodedToken: jwt.JwtPayload | string = {};
+	let token;
 
 	try {
-		decodedToken = jwt.verify(token, secret);
-	} catch (err) {
+		token = await verifyJwt(context, secret);
+	} catch (err: any) {
 		return {
-			status: 'Failed to verify jwt.',
+			status: err.message,
 			data: null
 		};
 	}
@@ -198,7 +178,7 @@ async function projectAuth(
 
 	const [ role ] = users.projectsConnection.edges;
 	const roleTokenPayload = {
-		sub: decodedToken.sub,
+		sub: token.sub,
 		roles: role.as
 	};
 	const roleToken = jwt.sign(roleTokenPayload, secret);
