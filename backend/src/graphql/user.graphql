@@ -4,7 +4,7 @@ type User {
   firstname: String
   lastname: String
   email: String!
-  password: String!
+  password: String! @private
   createdAt: DateTime
     @timestamp(operations: [CREATE])
   updatedAt: DateTime
@@ -18,8 +18,8 @@ type User {
 extend type User @auth(
   rules: [
     {
-      operations: [CREATE, READ, UPDATE, DELETE, CONNECT, DISCONNECT]
-      where: {
+      operations: [UPDATE, DELETE, CONNECT, DISCONNECT]
+      allow: {
         id: "$jwt.sub"
       }
     }
