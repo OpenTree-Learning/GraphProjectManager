@@ -17,6 +17,8 @@ type Task {
   description: String
   createdAt: DateTime!
           @timestamp(operations: [CREATE])
+  updatedAt: DateTime!
+          @timestamp(operations: [CREATE, UPDATE])
   duration: Duration
   labels: [String]
   priorityOrder: PriorityOrder

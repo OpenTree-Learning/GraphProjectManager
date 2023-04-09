@@ -20,7 +20,7 @@ export async function verifyJwt(
 	}
 
 	const token = authHeader.replace('Bearer ', '');
-	let decodedToken: jwt.JwtPayload | string = {};
+	let decodedToken: jwt.JwtPayload | string = {} as jwt.JwtPayload;
 
 	try {
 		decodedToken = jwt.verify(token, secret);

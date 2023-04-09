@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import { OGM } from '@neo4j/graphql-ogm';
 
 import { Context  } from '../types';
-import { MutationResponse } from './types';
+import { MutationResponse, ProjectAuthJwt } from './types';
 import { verifyJwt } from '../utils/jwt_verify.utils';
 
 
@@ -162,9 +162,7 @@ async function projectAuth(
 
 	const [ users ] = await user.find({
 		where: {
-			projects: {
-				id: args.id
-			}
+			id: token.sub
 		},
 		selectionSet: '{projectsConnection {edges {as}}}'
 	});
@@ -177,8 +175,8 @@ async function projectAuth(
 	}
 
 	const [ role ] = users.projectsConnection.edges;
-	const roleTokenPayload = {
-		sub: token.sub,
+	const roleTokenPayload: ProjectAuthJwt = {
+		sub: token.sub as string,
 		roles: role.as,
 		project_id: args.id
 	};

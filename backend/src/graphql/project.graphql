@@ -48,7 +48,7 @@ type ProjectResponseData @exclude {
 }
 
 type ProjectResponse @exclude {
-  status: String!
+  status: String
   data: ProjectResponseData
 }
 
