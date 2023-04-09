@@ -1,4 +1,5 @@
 type Invitation {
+  id: ID @id
   from: User
     @relationship(type: "CREATED_INVITATION", direction: IN)
   to: User
@@ -9,6 +10,7 @@ type Invitation {
 }
 
 type InvitationResponseData @exclude {
+  id: ID
   as: UserRole
 }
 
@@ -18,5 +20,6 @@ type InvitationResponse @exclude {
 }
 
 type Mutation {
-  invite(email: String, as: UserRole): InvitationResponse
+  invite(email: String!, as: UserRole!): InvitationResponse
+  answerInvitation(invitationId: String!, accept: Boolean!): ProjectResponse
 }

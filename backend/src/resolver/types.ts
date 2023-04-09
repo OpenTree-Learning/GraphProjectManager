@@ -1,5 +1,6 @@
 import {JwtPayload} from "jsonwebtoken";
 
+
 export interface MutationResponse {
 	status: string,
 	data: any

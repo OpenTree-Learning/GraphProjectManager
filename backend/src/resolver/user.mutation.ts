@@ -162,9 +162,7 @@ async function projectAuth(
 
 	const [ users ] = await user.find({
 		where: {
-			projects: {
-				id: args.id
-			}
+			id: token.sub
 		},
 		selectionSet: '{projectsConnection {edges {as}}}'
 	});

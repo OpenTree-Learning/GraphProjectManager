@@ -29,16 +29,7 @@ async function createProject(
 				name: args.name,
 				description: args.description,
 				contributors: {
-					connect: {
-				        	where: {
-				        		node:  {
-								id: token.sub
-				      			}
-				    		},
-						edge: {
-							as: "OWNER"
-						}
-				  	}
+					connect: {where: {node:  {id: token.sub}}, edge: {as: "OWNER"}}
 				}
 			}
 		]
@@ -104,10 +95,78 @@ async function invite(
 	};
 }
 
+async function answerInvitation(
+	parent: any,
+	args: { invitationId: string, accept: boolean },
+	context: Context
+) {
+	const { ogm }: { ogm: OGM<any> } = context;
+	const invitation = ogm.model('Invitation');
+	const user = ogm.model('User');
+	let token: ProjectAuthJwt;
+
+	try {
+		token = await verifyJwt(context, process.env.JWT_SECRET as string) as ProjectAuthJwt;
+	} catch (err: any) {
+		return {
+			status: err.message,
+			data: null
+		};
+	}
+
+	const [ invitations ] = await invitation.find({
+		where: {
+			id: args.invitationId
+		},
+		selectionSet: `{
+			id
+			to {id}
+			project {id, name, description, createdAt}
+			as
+		}`
+	});
+
+	if (!invitations) {
+		return {
+			status: 'Invitation not found.',
+			data: null
+		};
+	}
+
+	await invitation.delete({
+		where: {
+			id: args.invitationId
+		}
+	});
+
+	if (args.accept) {
+		await user.update({
+			where: {
+				id: token.sub
+			},
+			update: {
+				projects: {
+					connect: {
+						where: {node: {id: invitations.project.id}},
+						edge: {as: invitations.as}
+					}
+				}
+			}
+		});
+	}
+
+	return {
+		status: `Invitation successfully ${args.accept ? 'accepted' : 'refused'}`,
+		data: invitations.project
+	};
+}
+
+
 const resolvers = {
 	Mutation: {
 		createProject,
-		invite
+		invite,
+		answerInvitation
 	}
 };
 
