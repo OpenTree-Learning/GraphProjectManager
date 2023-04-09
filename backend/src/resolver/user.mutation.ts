@@ -179,7 +179,8 @@ async function projectAuth(
 	const [ role ] = users.projectsConnection.edges;
 	const roleTokenPayload = {
 		sub: token.sub,
-		roles: role.as
+		roles: role.as,
+		project_id: args.id
 	};
 	const roleToken = jwt.sign(roleTokenPayload, secret);
 
