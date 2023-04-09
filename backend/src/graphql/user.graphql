@@ -8,7 +8,7 @@ type User {
   createdAt: DateTime
     @timestamp(operations: [CREATE])
   updatedAt: DateTime
-    @timestamp(operations: [UPDATE])
+    @timestamp(operations: [CREATE, UPDATE])
   projects: [Project!]!
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
   tasks: [Task!]!

@@ -1,0 +1,22 @@
+type Invitation {
+  from: User
+    @relationship(type: "CREATED_INVITATION", direction: IN)
+  to: User
+    @relationship(type: "FOR_USER", direction: OUT)
+  project: Project
+    @relationship(type: "TO_PROJECT", direction: OUT)
+  as: UserRole!
+}
+
+type InvitationResponseData @exclude {
+  as: UserRole
+}
+
+type InvitationResponse @exclude {
+  status: String!
+  data: InvitationResponseData
+}
+
+type Mutation {
+  invite(email: String, as: UserRole): InvitationResponse
+}
