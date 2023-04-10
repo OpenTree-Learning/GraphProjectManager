@@ -2,14 +2,13 @@
 	--background-color: #161616;
 	--second-background-color: #0d1117;
 	--third-background-color: #161b22;
-	/*
-	--first-color: #eaf3f6;
-	--second-color: #b4caca;
-	--third-color: #7c9d9d;
-	*/
+
 	--first-color: #f4f9fa;
 	--second-color: #d9e4e4;
 	--third-color: #bccdcd;
+
+	--success-color: #238636;
+	--success-color-hover: #2ea043;
 
 	--logout-button-color: #c52400;
 

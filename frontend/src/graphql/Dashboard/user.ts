@@ -1,9 +1,13 @@
 import { gql } from "@apollo/client";
 
 
-export const ME = gql`
-	query Me {
-		users {
+export const USER = gql`
+	query User($id: ID!) {
+		users (
+			where: {
+				id: $id
+			}
+		) {
 			username
 			firstname
 			lastname

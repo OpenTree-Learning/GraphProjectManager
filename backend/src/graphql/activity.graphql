@@ -12,8 +12,9 @@ type CommitActivity @exclude {
 }
 
 type InvitationActivity @exclude {
-  createdAt: DateTime,
-  username: String,
+  id: ID
+  createdAt: DateTime
+  username: String
   projectname: String
 }
 

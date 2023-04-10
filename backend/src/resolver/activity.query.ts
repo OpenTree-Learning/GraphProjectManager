@@ -28,7 +28,7 @@ async function recentActivity(
 		},
 		selectionSet: `{
 			projects {tasks {name, updatedAt, updatedBy, oldState, state}},
-			invitations {createdAt, from {username}, project {name}}
+			invitations {id, createdAt, from {username}, project {name}}
 		}`,
 		options: {
 			limit: 100
@@ -47,11 +47,12 @@ async function recentActivity(
 	
 	const invitations = records.invitations
 			.map((i: any) => ({
+				id: i.id,
 				createdAt: i.createdAt,
 				username: i.from.username,
-				projectname: i.project.name
+				projectname: i.project.name,
 			}));
-	
+
 	const activities = [...commits, ...invitations]
 			.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 

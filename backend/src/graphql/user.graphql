@@ -21,7 +21,7 @@ extend type User @auth(
   rules: [
     {
       operations: [UPDATE, DELETE]
-      allow: {
+      where: {
         id: "$jwt.sub"
       }
     }
