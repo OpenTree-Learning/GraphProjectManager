@@ -1,0 +1,30 @@
+enum ActivityType {
+  TASK_STATE_CHANGED
+  PROJECT_INVITATION
+}
+
+type CommitActivity @exclude {
+  name: String
+  createdBy: String
+  createdAt: DateTime
+  oldState: State
+  state: State
+}
+
+type InvitationActivity @exclude {
+  id: ID
+  createdAt: DateTime
+  username: String
+  projectname: String
+}
+
+union Activity = CommitActivity | InvitationActivity
+
+type ActivityResponse {
+  status: String
+  data: [Activity]
+}
+
+type Query {
+  recentActivity: ActivityResponse!
+}

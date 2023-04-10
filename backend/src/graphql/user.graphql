@@ -12,14 +12,16 @@ type User {
   projects: [Project!]!
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
   tasks: [Task!]!
-    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: IN)
+    @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)
+  invitations: [Invitation!]!
+    @relationship(type: "FOR_USER", direction: IN)
 }
 
 extend type User @auth(
   rules: [
     {
-      operations: [UPDATE, DELETE, CONNECT, DISCONNECT]
-      allow: {
+      operations: [UPDATE, DELETE]
+      where: {
         id: "$jwt.sub"
       }
     }

@@ -12,6 +12,7 @@ import { Context, NodeEnv, NodeEnvType } from './types';
 import * as dotenv from 'dotenv';
 import logger from './logger';
 import path from 'path';
+import {Neo4jGraphQLCallback} from '@neo4j/graphql/dist/types';
 
 
 const configExt = {

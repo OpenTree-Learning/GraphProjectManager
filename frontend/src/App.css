@@ -11,3 +11,23 @@ body {
 body, input, textarea, button {
 	font-family: 'Montserrat', sans-serif;
 }
+
+.link {
+	color: var(--first-link-color);
+}
+
+.taskState {
+	padding: 5px;
+	border-radius: 5px;
+	background-color: #30363d;
+}
+
+.taskState_TODO {
+	color: #FFD700;
+}
+.taskState_DOING {
+	color: #4169E1;
+}
+.taskState_DONE {
+	color: #008000;
+}

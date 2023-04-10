@@ -15,30 +15,30 @@ type Project {
     """)
 }
 
-extend type Project @auth(
-  rules: [
-    {
-      operations: [READ],
-      where: {
-        contributors: {
-          id: "$jwt.sub"
-        }
-      }
-    },
-    {
-      operations: [READ, UPDATE, DELETE, CONNECT, DISCONNECT],
-      roles: ["OWNER"]
-    },
-    {
-      operations: [READ, CONNECT, DISCONNECT],
-      roles: ["MODERATOR", "CONTRIBUTOR"]
-    },
-    {
-      operations: [READ],
-      roles: ["GUEST"]
-    }
-  ]
-)
+#extend type Project @auth(
+#  rules: [
+#    {
+#      operations: [READ],
+#      where: {
+#        contributors: {
+#          id: "$jwt.sub"
+#        }
+#      }
+#    },
+#    {
+#      operations: [READ, UPDATE, DELETE, CONNECT, DISCONNECT],
+#      roles: ["OWNER"]
+#    },
+#    {
+#      operations: [READ, CONNECT, DISCONNECT],
+#      roles: ["MODERATOR", "CONTRIBUTOR"]
+#    },
+#    {
+#      operations: [READ],
+#      roles: ["GUEST"]
+#    }
+#  ]
+#)
 
 type ProjectResponseData @exclude {
   id: ID!
