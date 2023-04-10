@@ -1,5 +1,7 @@
 type Invitation {
   id: ID @id
+  createdAt: DateTime!
+    @timestamp(operations: [CREATE])
   from: User
     @relationship(type: "CREATED_INVITATION", direction: IN)
   to: User

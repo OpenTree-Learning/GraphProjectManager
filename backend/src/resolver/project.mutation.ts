@@ -161,7 +161,6 @@ async function answerInvitation(
 	};
 }
 
-
 const resolvers = {
 	Mutation: {
 		createProject,

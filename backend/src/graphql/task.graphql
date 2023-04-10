@@ -16,13 +16,15 @@ type Task {
   name: String!
   description: String
   createdAt: DateTime!
-          @timestamp(operations: [CREATE])
+    @timestamp(operations: [CREATE])
   updatedAt: DateTime!
-          @timestamp(operations: [CREATE, UPDATE])
+    @timestamp(operations: [CREATE, UPDATE])
+  updatedBy: String
   duration: Duration
   labels: [String]
   priorityOrder: PriorityOrder
   state: State
+  oldState: State
   primitives: [Task!]! 
     @relationship(type: "DEPENDS_ON", direction: OUT)
   assignedUsers: [User!]!
@@ -34,19 +36,39 @@ type Task {
     """)
 }
 
-extend type Task @auth(
-  rules: [
-    {
-      operations: [CREATE, READ, UPDATE, DELETE, CONNECT, DISCONNECT],
-      roles: ["OWNER", "MODERATOR"]
-    }
-    {
-      operations: [READ, CONNECT, DISCONNECT],
-      roles: ["CONTRIBUTOR"]
-    }
-    {
-      operations: [READ],
-      roles: ["GUEST"]
-    }
-  ]
-)
+#extend type Task @auth(
+#  rules: [
+#    {
+#      operations: [READ],
+#      where: {
+#        assignedUsers: {
+#          id: "$jwt.sub"
+#        }
+#      }
+#    },
+#    {
+#      operations: [CREATE, READ, UPDATE, DELETE, CONNECT, DISCONNECT],
+#      roles: ["OWNER", "MODERATOR"]
+#    }
+#    {
+#      operations: [READ, CONNECT, DISCONNECT],
+#      roles: ["CONTRIBUTOR"]
+#    }
+#    {
+#      operations: [READ],
+#      roles: ["GUEST"]
+#    }
+#  ]
+#)
+
+type CommitResponse {
+  status: String,
+  data: Task
+}
+
+type Mutation {
+  commit(
+    taskId: ID,
+    state: State
+  ): CommitResponse
+}
