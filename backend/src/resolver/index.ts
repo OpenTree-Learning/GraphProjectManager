@@ -5,6 +5,20 @@ import taskResolvers from './tasks.mutation';
 
 
 const resolvers = {
+	Activity: {
+		__resolveType: (obj: any) => {
+			console.log('Input:', obj);
+			if (obj.state) {
+				console.log('CommitActivity');
+				return "CommitActivity";
+			}
+			if (obj.projectname) {
+				console.log('InvitationActivity');
+				return "InvitationActivity";
+			}
+			return null;
+		}
+	},
 	Query: {
 		...activityResolvers.Query
 	},

@@ -1,10 +1,11 @@
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 
 
 function App() {

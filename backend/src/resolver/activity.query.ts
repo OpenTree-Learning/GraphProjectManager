@@ -10,9 +10,7 @@ async function recentActivity(
 	context: Context
 ) {
 	const { ogm }: { ogm: OGM<any> } = context;
-	const task = ogm.model('Task');
 	const user = ogm.model('User');
-	const project = ogm.model('Project');
 	let token;
 
 	try {
@@ -23,65 +21,44 @@ async function recentActivity(
 			data: null
 		};
 	}
-	
-	/**
-	 * TODO: FIND A WAY TO GET ALL TASKS THAT HAS BEEN UPDATED UNDER THE LAST 24 HOURS.
-	 *     + GET ALL THE INVITATIONS
-	 *    => MAP ALL THIS RECORDS INTO AN ARRAY AND RETURNS IT.
-	 */
 
-	const [ projects ] = await project.find({
-		where: {
-			contributors: {
-				id: token.sub
-			}
-		},
-		selectionSet: '{tasks {name, updatedAt, updatedBy, oldState, state}}',
-		options: {
-			limit: 10
-		}
-	});
-	const tasks = projects.tasks
-			.map((t: any) => ({
-				type: "TASK_STATE_CHANGED",
-				data: {
-					name: t.name,
-					createdBy: t.updatedBy, 
-					createdAt: t.updatedAt, 
-					oldState: t.oldState, 
-					state: t.state
-				}
-			}));
-
-	const [ users ] = await user.find({
+	const [ records ] = await user.find({
 		where: {
 			id: token.sub
 		},
-		selectionSet: '{invitations {createdAt, from {username}, project {name}}}',
+		selectionSet: `{
+			projects {tasks {name, updatedAt, updatedBy, oldState, state}},
+			invitations {createdAt, from {username}, project {name}}
+		}`,
 		options: {
-			limit: 10
+			limit: 100
 		}
 	});
 
-	const invitations = users.invitations
-		.map((i: any) => ({
-			type: "PROJECT_INVITATION",
-			data: {
+	const [ tasks ] = records.projects;
+	const commits = tasks.tasks
+			.map((t: any) => ({
+				name: t.name,
+				createdBy: t.updatedBy, 
+				createdAt: t.updatedAt, 
+				oldState: t.oldState, 
+				state: t.state
+			}));
+	
+	const invitations = records.invitations
+			.map((i: any) => ({
 				createdAt: i.createdAt,
 				username: i.from.username,
 				projectname: i.project.name
-			}
-		}))
-
-	const activities = [
-		...tasks,
-		...invitations
-	].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+			}));
+	
+	const activities = [...commits, ...invitations]
+			.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
 	return {
-		status: 'Recent activities successfully fetched.',
+		status: 'Recent activities successfully fetched',
 		data: activities
-	}
+	};
 }
 
 const resolvers = {

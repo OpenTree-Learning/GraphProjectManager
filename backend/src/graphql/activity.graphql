@@ -5,7 +5,7 @@ enum ActivityType {
 
 type CommitActivity @exclude {
   name: String
-  createdBy: User
+  createdBy: String
   createdAt: DateTime
   oldState: State
   state: State
@@ -17,12 +17,7 @@ type InvitationActivity @exclude {
   projectname: String
 }
 
-union ActivityData = CommitActivity | InvitationActivity
-
-type Activity {
-  type: ActivityType
-  data: ActivityData
-}
+union Activity = CommitActivity | InvitationActivity
 
 type ActivityResponse {
   status: String
