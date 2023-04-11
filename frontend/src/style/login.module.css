@@ -3,7 +3,7 @@
 
 .container {
 	width: 25vw;
-	height: 60vh;
+	height: 65vh;
 	margin-top: 50vh;
 	margin-left: 50vw;
 	transform: translate(-50%, -50%);
@@ -12,17 +12,6 @@
 	align-items: center;
 	justify-content: space-evenly;
 	background-color: var(--second-color);
-	border-radius: 5px;
-}
-
-.loginError {
-	font-weight: bold;
-	background-color: var(--error-first-color);
-	width: 60%;
-	padding: 15px 0px 15px 0px;
-	text-align: center;
-	color: white;
-	border-left: 5px solid var(--error-second-color);
 	border-radius: 5px;
 }
 
@@ -53,6 +42,7 @@
 }
 
 .loginForm > input[type="button"] {
+	margin-top: 20px;
 	background-color: var(--action-first-color);
 	color: #fff;
 }
@@ -60,4 +50,9 @@
 .loginForm > input[type="button"]:hover {
 	background-color: var(--action-second-color);
 	cursor: pointer;
+}
+
+#noAccountLink {
+	font-size: 14px;
+	align-self: center;
 }

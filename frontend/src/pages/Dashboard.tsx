@@ -125,7 +125,7 @@ function Dashboard (props: DashboardProps): ReactElement {
 							</div>
 							<div id={ styles.projectList }>
 								{projects.map((project, idx) =>
-									<ProjectTile key={idx} project={project}/>
+									<ProjectTile key={idx} project={project} onProjectSelect={p => console.log(p)}/>
 								)}
 							</div>
 						</div>

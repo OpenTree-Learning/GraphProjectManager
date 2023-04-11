@@ -1,11 +1,12 @@
 import { ReactElement, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import { notify } from '../utils/notify';
 import ClipLoader from 'react-spinners/ClipLoader';
 import styles from '../style/login.module.css';
 import { AUTH } from '../graphql/Login/auth';
+import { Project } from './definitions/Dashboard';
 
 
 interface LoginProps {
@@ -45,19 +46,18 @@ function Login (props: LoginProps): ReactElement {
 		})
 	};
 
+	const handleNoAccountClick = (project: Project): void => {
+	}
+
 	return (
 		<div className={styles.container}>
 			<img src='./logo.png' alt='GPM logo'/>
-			{loginError && (
-				<div className={styles.loginError}>
-					<span>{loginError}</span>
-				</div>
-			)}
 			<ClipLoader loading={loading} />
 			<div className={styles.loginForm}>
 				<input type='text' id='login' name='login' onChange={e => setLogin(e.target.value)} value={login} placeholder='Email'/>
 				<input type='password' id='password' name='password' onChange={e => setPassword(e.target.value)} value={password} placeholder='Password'/>
 				<input type='button' onClick={handleSubmit} value='Connect'/>
+				<Link id={ styles.noAccountLink } to='../register'>I have no account</Link>
 			</div>
 		</div>
 	);

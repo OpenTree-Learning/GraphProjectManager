@@ -31,3 +31,7 @@ body, input, textarea, button {
 .taskState_DONE {
 	color: #008000;
 }
+
+.invalidInput {
+	border: 5px solid red;
+}
