@@ -4,7 +4,8 @@ import { Project } from '../pages/definitions/Dashboard';
 
 
 interface ProjectTileProps {
-	project: Project
+	project: Project,
+	onProjectSelect: (project: Project) => void
 }
 
 function ProjectTile (props: ProjectTileProps): ReactElement {

@@ -1,7 +1,11 @@
 :root {
+	--logo-color: #474a56;
+
 	--background-color: #161616;
 	--second-background-color: #0d1117;
 	--third-background-color: #161b22;
+
+	--light-background: #abfffe;
 
 	--first-color: #f4f9fa;
 	--second-color: #d9e4e4;
