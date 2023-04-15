@@ -1,20 +1,23 @@
 import { ReactElement, useEffect, useState } from 'react';
-import ClipLoader from 'react-spinners/ClipLoader';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
+import moment from 'moment';
 import { FaTasks } from 'react-icons/fa';
 
 import { USER } from '../graphql/Dashboard/user';
 import { RECENT_ACTIVITIES } from '../graphql/Dashboard/recentActivities';
-import { Project, User, Activity } from './definitions/Dashboard';
+import { Project, User, Activity, InvitationActivity } from './definitions/Dashboard';
 import { cutString, capitalize } from '../utils/string';
 import { parseJwt } from '../utils/jwt';
 import { notify } from '../utils/notify';
 import ProjectTile from '../components/ProjectTile';
+import ActivityTile from '../components/ActivityTile';
+import Timeline from '../components/Timeline';
 
 import styles from '../style/dashboard.module.css';
-import RecentActivity from '../components/RecentActivity';
 
+
+const ActivitiesTimeline = Timeline<Activity>
 
 interface DashboardProps {}
 
@@ -47,6 +50,7 @@ function Dashboard (props: DashboardProps): ReactElement {
 		let projects: Project [] = user.projects;
 
 		projects = projects.map((project: Project) => ({
+			id: project.id,
 			name: cutString(project.name, 30),
 			description: cutString(project.description, 100),
 			role: capitalize(project.role)
@@ -64,7 +68,7 @@ function Dashboard (props: DashboardProps): ReactElement {
 			return;
 		}
 
-		let recentActivities = data.recentActivity.data;
+		let recentActivities: InvitationActivity [] = data.recentActivity.data;
 
 		setRecentActivities(recentActivities)
 	}, [recentActivitiesQuery]);
@@ -113,7 +117,12 @@ function Dashboard (props: DashboardProps): ReactElement {
 							<div className={ styles.sectionHeader }>
 								<h3>Recent activity</h3>
 							</div>
-							<RecentActivity activities={recentActivities}/>
+							{/*<RecentActivity activities={recentActivities}/>*/}
+							<Timeline
+								labels={recentActivities.map(activity => moment(activity.createdAt).startOf('second').fromNow())}
+								elements={recentActivities}
+								renderElement={activity => <ActivityTile activity={activity}/>}
+							/>
 						</div>
 						<div id={ styles.projectListArea }>
 							<div className={ styles.sectionHeader }>
