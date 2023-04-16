@@ -148,6 +148,7 @@ async function projectAuth(
 ) {
 	const { ogm }: { ogm: OGM<any> } = context;
 	const user = ogm.model('User');
+	const project = ogm.model('Project');
 	const secret: string = process.env.JWT_SECRET as string;
 	let token;
 
@@ -162,9 +163,12 @@ async function projectAuth(
 
 	const [ users ] = await user.find({
 		where: {
-			id: token.sub
+			id: token.sub,
+			projects: {
+				id: args.id
+			}
 		},
-		selectionSet: '{projectsConnection {edges {as}}}'
+		selectionSet: `{ projectsConnection { edges { as, node { id } }}}`
 	});
 
 	if (!users) {
@@ -174,17 +178,24 @@ async function projectAuth(
 		};
 	}
 
-	const [ role ] = users.projectsConnection.edges;
+	const contributingProjectEdge = users.projectsConnection.edges.find((e: any) => e.node.id === args.id);
+
+	if (!contributingProjectEdge) {
+		return {
+			status: 'User doesn\'t contribute to this project.',
+			data: null
+		};
+	}
+
 	const roleTokenPayload: ProjectAuthJwt = {
 		sub: token.sub as string,
-		roles: role.as,
+		roles: contributingProjectEdge.as,
 		project_id: args.id
 	};
-	const roleToken = jwt.sign(roleTokenPayload, secret);
 
 	return {
 		status: 'User successfully authenticated to the project.',
-		data: roleToken
+		data: jwt.sign(roleTokenPayload, secret)
 	};
 }
 

@@ -26,7 +26,6 @@ const instance = {
 
 const nodeEnv = process.env.NODE_ENV;
 
-
 if (Object.values(NodeEnv).includes(nodeEnv as NodeEnv)) {
 	const env = nodeEnv as NodeEnvType;
 	const ext = `.env.${configExt[env]}`;
