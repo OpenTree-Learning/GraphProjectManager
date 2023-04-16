@@ -1,23 +1,22 @@
-import { ReactElement, useEffect, useState } from 'react';
-import {Activity, ActivityType, CommitActivity, InvitationActivity} from '../pages/definitions/Dashboard';
+import { ReactElement } from "react";
+import { useMutation } from "@apollo/client";
+import moment from "moment";
 import { RiUserReceivedLine } from 'react-icons/ri';
 import { TbGitCommit } from 'react-icons/tb';
 import { AiOutlineCheck } from 'react-icons/ai';
 import { AiOutlineClose } from 'react-icons/ai';
-import moment from 'moment';
-import {useMutation} from '@apollo/client';
 
-import { ANSWER_INVITATION } from '../graphql/Dashboard/answerInvitation';
-import { notify } from '../utils/notify';
+import { Activity, ActivityType, CommitActivity, InvitationActivity } from "../pages/definitions/Dashboard";
+import { ANSWER_INVITATION } from "../graphql/Dashboard/answerInvitation";
+import { notify } from "../utils/notify";
 import styles from '../style/dashboard.module.css';
 
 
-interface RecentActivityProps {
-	activities: Activity []
+interface ActivityTileProps {
+	activity: Activity
 }
 
-function RecentActivity (props: RecentActivityProps): ReactElement {
-
+function ActivityTile ({ activity }: ActivityTileProps): ReactElement {
 	const [answerInvitation, { data, loading, error }] = useMutation(ANSWER_INVITATION);
 
 	const handleInvitationAnswer = (invitationId: string, accept: boolean) => {
@@ -40,7 +39,7 @@ function RecentActivity (props: RecentActivityProps): ReactElement {
 		})
 		.catch(err => {
 			notify(err.message, 'error');
-		})
+		});
 	}
 
 	const renderIcon = (type: string) => {
@@ -90,22 +89,18 @@ function RecentActivity (props: RecentActivityProps): ReactElement {
 	}
 
 	return (
-		<div id={ styles.activityArea }>
-			{props.activities.map((activity, idx) => (
-				<div id={ styles.activityItem }>
-					{renderIcon(activity.__typename)}
-					<div id={ styles.activityContent }>
-						{activity.__typename === ActivityType.INVITATION && (
-							renderInvitationActivity(activity as InvitationActivity)
-						)}
-						{activity.__typename === ActivityType.COMMIT && (
-							renderCommitActivity(activity as CommitActivity)
-						)}
-					</div>
-				</div>
-			))}
+		<div id={ styles.activityItem }>
+			{renderIcon(activity.__typename)}
+			<div id={ styles.activityContent }>
+				{activity.__typename === ActivityType.INVITATION && (
+					renderInvitationActivity(activity as InvitationActivity)
+				)}
+				{activity.__typename === ActivityType.COMMIT && (
+					renderCommitActivity(activity as CommitActivity)
+				)}
+			</div>
 		</div>
-	)
+	);
 }
 
-export default RecentActivity;
+export default ActivityTile;

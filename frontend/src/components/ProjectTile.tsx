@@ -8,15 +8,14 @@ interface ProjectTileProps {
 	onProjectSelect: (project: Project) => void
 }
 
-function ProjectTile (props: ProjectTileProps): ReactElement {
-	const { project } = props;
+function ProjectTile ({ project, onProjectSelect }: ProjectTileProps): ReactElement {
 	const role = project.role.toLowerCase();
 
 	return (
-		<div id={ styles.projectItem }>
+		<div id={ styles.projectItem } onClick={ () => onProjectSelect(project) }>
 			<div id={ styles.projectItemContent }>
 				<div className={ styles.itemHeader}>
-					<a href="#">{ project.name }</a>
+					<a className={ styles.projectLink } >{ project.name  }</a>
 					<span id={styles[`${role}_label`]}>{ project.role }</span>
 				</div>
 				<span>{ project.description }</span>

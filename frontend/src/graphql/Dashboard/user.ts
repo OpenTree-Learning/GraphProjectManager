@@ -12,6 +12,7 @@ export const USER = gql`
 			firstname
 			lastname
 			projects {
+				id
 				name
 				description
 				role

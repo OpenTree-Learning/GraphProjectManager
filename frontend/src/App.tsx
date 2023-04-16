@@ -7,6 +7,8 @@ import './App.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Project from './pages/Project';
+import {parseJwt} from './utils/jwt';
 
 
 function App() {
@@ -14,6 +16,19 @@ function App() {
 
 	const handleUserLogin = () => {
 		navigate('/dashboard');
+	}
+
+	const encodedToken = localStorage.getItem('user');
+	const token = encodedToken ? parseJwt(encodedToken) : {};
+
+	function redirectProject () {
+		if (token.sub && token.roles && token.project_id) {
+			return <Project/>
+		}
+		if (token.sub) {
+			return <Navigate to="/dashboard"/>
+		}
+		return <Navigate to="/login"/>
 	}
 
 	return (
@@ -30,11 +45,15 @@ function App() {
 				/>
 				<Route
 					path="/dashboard"
-					element={localStorage.getItem('user') ? (
+					element={token.sub ? (
 						<Dashboard/>
 					) : (
 						<Navigate to="/login"/>
 					)}
+				/>
+				<Route
+					path="/project/:uuid"
+					element={redirectProject()}
 				/>
 			</Routes>
 			<ToastContainer/>

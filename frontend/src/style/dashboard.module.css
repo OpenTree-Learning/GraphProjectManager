@@ -45,7 +45,7 @@
 }
 
 #projectListArea {
-	width: 53%;
+	width: 55%;
 }
 
 .sectionHeader {
@@ -70,14 +70,14 @@
 
 #projectList {
 	width: 100%;
-	height: 450px;
+	max-height: 52vh;
 	overflow-y: auto;
 	overflow-x: hidden;
 	padding-right: 30px;
 	display: grid;
-	grid-template-columns: [row1] 400px [row3] 400px;
-	column-gap: 32px;
-	row-gap: 20px;
+	grid-template-columns: repeat(2, 1fr);
+	row-gap: 28px;
+	column-gap: 28px;
 }
 
 #headerButtons {
@@ -132,6 +132,14 @@
 
 #activityArea {
 	display: flex;
+}
+
+#activityTimeLine {
+	margin-right: 30px;
+}
+
+#activityList {
+	display: flex;
 	flex-direction: column;
 }
 
@@ -142,7 +150,6 @@
 	background-color: var(--third-background-color);
 	border: 1px solid var(--first-border-color);
 	border-radius: 5px;
-	margin-bottom: 15px;
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
@@ -211,6 +218,11 @@
 	justify-content: center;
 }
 
+#projectItem:hover {
+	cursor: pointer;
+	background-color: #1d242e;
+}
+
 #projectItemContent {
 	height: 62%;
 	width: 88%;
@@ -239,7 +251,7 @@
 	display: block;
 }
 
-#projectItemContent > .itemHeader > a {
+.projectLink {
 	font-size: 16px;
 	text-decoration: none;
 	color: var(--first-link-color);

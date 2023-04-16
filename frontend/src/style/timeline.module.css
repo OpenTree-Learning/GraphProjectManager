@@ -1,0 +1,66 @@
+@import "./variables/colors.css";
+
+
+#timeline {
+	display: flex;
+	flex-direction: column;
+	max-height: 52vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 15px;
+}
+
+#timelineRow {
+	display: flex;
+}
+
+#timelineLabelContainer, #timelineElementContainer {
+	display: flex;
+	align-items: center;
+}
+
+#timelineLabelContainer {
+	width: 15%;
+}
+
+#timelineLabel {
+	width: 100%;
+	font-size: 12px;
+	font-style: italic;
+	text-align: right;
+}
+
+#timelineNodeContainer {
+	width: 5vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.timelineLineTop {
+	border-radius: 10px 10px 0px 0px;
+}
+
+.timelineLineBottom {
+	border-radius: 0px 0px 10px 10px;
+}
+
+.timelineLine {
+	width: 2px;
+	height: 45%;
+	background-color: var(--first-text-color);
+	z-index: 0;
+}
+
+#timelineNode {
+	height: 10%;
+	aspect-ratio: 1;
+	border: 2px solid var(--first-text-color);
+	background-color: var(--second-background-color);
+	border-radius: 50%;
+	z-index: 1;
+}
+
+#timelineElementContainer {
+	margin: 10px 0px 10px 0px;
+}
