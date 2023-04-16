@@ -1,11 +1,12 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import moment from 'moment';
 import { FaTasks } from 'react-icons/fa';
 
 import { USER } from '../graphql/Dashboard/user';
 import { RECENT_ACTIVITIES } from '../graphql/Dashboard/recentActivities';
+import { PROJECT_AUTH } from '../graphql/Dashboard/projectAuth';
 import { Project, User, Activity, InvitationActivity } from './definitions/Dashboard';
 import { cutString, capitalize } from '../utils/string';
 import { parseJwt } from '../utils/jwt';
@@ -33,6 +34,7 @@ function Dashboard (props: DashboardProps): ReactElement {
 		variables: {id: token.sub}
 	});
 	const recentActivitiesQuery = useQuery(RECENT_ACTIVITIES);
+	const [projectAuth, { data, loading, error }] = useMutation(PROJECT_AUTH);
 
 	useEffect(() => {
 		const {loading, error, data} = meQuery;
@@ -77,6 +79,26 @@ function Dashboard (props: DashboardProps): ReactElement {
 	const handleLogOut = () => {
 		localStorage.clear();
 		navigate('/login');
+	}
+
+	const handleProjectSelect = (project: Project) => {
+		projectAuth({ variables: { projectAuthId: project.id } })
+		.then(res => {
+			const { data } = res;
+			const status = data.projectAuth.status;
+			const token = data.projectAuth.data;
+			
+			if (token !== null) {
+				localStorage.setItem('user', token);
+				notify(status, 'success');
+				navigate(`/project/${project.id}`);
+			} else {
+				notify(status, 'error');
+			}
+		})
+		.catch(err => {
+			notify(err.message, 'error');
+		});
 	}
 
 
@@ -134,7 +156,11 @@ function Dashboard (props: DashboardProps): ReactElement {
 							</div>
 							<div id={ styles.projectList }>
 								{projects.map((project, idx) =>
-									<ProjectTile key={idx} project={project} onProjectSelect={p => console.log(p)}/>
+									<ProjectTile 
+										key={idx} 
+										project={project} 
+										onProjectSelect={project => handleProjectSelect(project)}
+									/>
 								)}
 							</div>
 						</div>

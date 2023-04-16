@@ -218,6 +218,11 @@
 	justify-content: center;
 }
 
+#projectItem:hover {
+	cursor: pointer;
+	background-color: #1d242e;
+}
+
 #projectItemContent {
 	height: 62%;
 	width: 88%;

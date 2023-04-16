@@ -43,7 +43,7 @@ function Login (props: LoginProps): ReactElement {
 		})
 		.catch(err => {
 			notify(err.message, 'error');
-		})
+		});
 	};
 
 	const handleNoAccountClick = (project: Project): void => {
