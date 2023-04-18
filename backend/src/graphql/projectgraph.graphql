@@ -1,0 +1,45 @@
+type PNode @exclude {
+  id: ID
+  name: String
+  description: String
+  createdAt: DateTime
+}
+
+type TNode @exclude {
+  id: ID
+  name: String
+  description: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  updatedBy: String
+  labels: [String]
+  priorityOrder: PriorityOrder
+  state: State
+  oldState: State
+}
+
+type UNode @exclude {
+  id: ID
+  username: String
+  firstname: String
+  lastname: String
+  email: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+union ProjectNode = PNode | TNode | UNode
+
+type ProjectEdge @exclude {
+  source: ID
+  target: ID
+}
+
+type ProjectGraph @exclude {
+  nodes: [ProjectNode]
+  edges: [ProjectEdge]
+}
+
+type Query {
+  projectGraph: ProjectGraph
+}
