@@ -30,22 +30,23 @@ async function projectGraph(
 	}
 
 	const edgeRes = await driver.executeQuery(`
-		MATCH (p1:Project {id: $id})-[c1:DEPENDS_ON]-(t1:Task)
-		RETURN { source: startNode(c1).id, target: endNode(c1).id } AS edges
-		UNION
-		MATCH (p1:Project {id: $id})-[:DEPENDS_ON*]-(t1:Task)-[:DEPENDS_ON]-(t2:Task)
-		RETURN { source: t1.id, target: t2.id } AS edges
-		UNION
-		MATCH (p1:Project {id: $id})-[:DEPENDS_ON*]-(t1:Task)-[:CONTRIBUTES]-(u:User)
-		RETURN { source: t1.id, target: u.id } AS edges
+    MATCH (p1:Project {id: "c850ed1e-4f78-4919-b836-3df3a8b9b588"})-[c1:DEPENDS_ON]-(t1:Task)
+    RETURN { id: id(c1), source: startNode(c1).name, target: endNode(c1).name } AS edges
+    UNION
+    MATCH (p1:Project {id: "c850ed1e-4f78-4919-b836-3df3a8b9b588"})-[:DEPENDS_ON*]-(t1:Task)-[c2:DEPENDS_ON]-(t2:Task)
+    RETURN { id: id(c2), source: t1.name, target: t2.name } AS edges
+    UNION
+    MATCH (p1:Project {id: "c850ed1e-4f78-4919-b836-3df3a8b9b588"})-[:DEPENDS_ON*]-(t1:Task)-[c3:CONTRIBUTES]-(u:User)
+    RETURN { id: id(c3), source: t1.name, target: u.username } AS edges
 	`, 
 		{ id: token.project_id }
 	);
 
 	const nodeRes = await driver.executeQuery(`
-		MATCH (p:Project {id: $id})-[:DEPENDS_ON*]-(t:Task)
-		MATCH (p2:Project {id: $id})-[:DEPENDS_ON*]-(t2:Task)-[:CONTRIBUTES]-(u:User)
-		RETURN collect(DISTINCT p)+collect(t)+collect(DISTINCT u) AS nodes
+    MATCH (p:Project {id: "c850ed1e-4f78-4919-b836-3df3a8b9b588"})
+    MATCH (p)-[:DEPENDS_ON*]->(t:Task)
+    OPTIONAL MATCH (t)-[:CONTRIBUTES]-(u:User)
+    RETURN collect(DISTINCT p)+collect(t)+collect(u) AS nodes
        `,
 	       { id: token.project_id }
 	);
