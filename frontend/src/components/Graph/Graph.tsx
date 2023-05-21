@@ -1,47 +1,29 @@
-import React, {ReactElement, useEffect, useState} from 'react';
-import rd3 from 'react-d3-library';
+import React from 'react';
+import { useRef, useEffect, ReactElement } from 'react';
 
-import createGraph from './graph';
+import createGraph from './d3';
+import {GraphProps} from './types';
+
+import './Graph.css';
 
 
-const RD3Component = rd3.Component;
+function Graph<T>(props: GraphProps<T>): ReactElement {
+  const graphContainerRef = useRef(null);
 
-interface GraphProps {
-	nodes: any [],
-	links: any [],
-	width: number,
-	height: number,
-	nodeTitle: (n: any) => string,
-	nodeGroups: string [],
-	nodeGroup: (n: any) => string,
-	nodeFill: number,
-	nodeStroke: number,
-	linkStroke: number
+  useEffect(() => {
+    // @ts-ignore
+    if (graphContainerRef.current.children.length > 0) {
+      return;
+    }
+    createGraph<T>({
+      ref: graphContainerRef,
+      ...props
+    })
+  }, []);
+
+  return (
+    <div ref={graphContainerRef}></div>
+  );
 }
 
-function Graph ({
-	nodes,
-	links,
-	width,
-	height,
-	nodeTitle,
-	nodeGroups,
-	nodeGroup,
-	nodeFill,
-	nodeStroke,
-	linkStroke
-}: GraphProps): ReactElement {
-	const [data, setData] = useState<any>({});
-
-	useEffect(() => {
-		const node = createGraph({ nodes, links}, {width, height, nodeTitle, nodeGroups, nodeGroup, nodeFill, nodeStroke, linkStroke});
-
-		setData(node);
-	}, []);
-
-	return (
-		<div>
-			<RD3Component data={data} />
-		</div>
-	);
-}
+export default Graph;

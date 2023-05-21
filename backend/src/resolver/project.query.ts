@@ -31,13 +31,13 @@ async function projectGraph(
 
 	const edgeRes = await driver.executeQuery(`
     MATCH (p1:Project {id: "c850ed1e-4f78-4919-b836-3df3a8b9b588"})-[c1:DEPENDS_ON]-(t1:Task)
-    RETURN { id: id(c1), source: startNode(c1).name, target: endNode(c1).name } AS edges
+    RETURN { id: id(c1), source: startNode(c1).id, target: endNode(c1).id } AS edges
     UNION
     MATCH (p1:Project {id: "c850ed1e-4f78-4919-b836-3df3a8b9b588"})-[:DEPENDS_ON*]-(t1:Task)-[c2:DEPENDS_ON]-(t2:Task)
-    RETURN { id: id(c2), source: t1.name, target: t2.name } AS edges
+    RETURN { id: id(c2), source: t1.id, target: t2.id } AS edges
     UNION
     MATCH (p1:Project {id: "c850ed1e-4f78-4919-b836-3df3a8b9b588"})-[:DEPENDS_ON*]-(t1:Task)-[c3:CONTRIBUTES]-(u:User)
-    RETURN { id: id(c3), source: t1.name, target: u.username } AS edges
+    RETURN { id: id(c3), source: t1.id, target: u.id } AS edges
 	`, 
 		{ id: token.project_id }
 	);

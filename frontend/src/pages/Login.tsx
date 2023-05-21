@@ -6,7 +6,7 @@ import { notify } from '../utils/notify';
 import ClipLoader from 'react-spinners/ClipLoader';
 import styles from '../style/login.module.css';
 import { AUTH } from '../graphql/Login/auth';
-import { Project } from './definitions/Dashboard';
+import { Project } from '../types/Dashboard';
 
 
 interface LoginProps {

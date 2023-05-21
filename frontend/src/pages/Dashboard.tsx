@@ -7,7 +7,7 @@ import { FaTasks } from 'react-icons/fa';
 import { USER } from '../graphql/Dashboard/user';
 import { RECENT_ACTIVITIES } from '../graphql/Dashboard/recentActivities';
 import { PROJECT_AUTH } from '../graphql/Dashboard/projectAuth';
-import { Project, User, Activity, InvitationActivity } from './definitions/Dashboard';
+import { Project, User, Activity, InvitationActivity } from '../types/Dashboard';
 import { cutString, capitalize } from '../utils/string';
 import { parseJwt } from '../utils/jwt';
 import { notify } from '../utils/notify';
