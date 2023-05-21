@@ -6,7 +6,6 @@ import { notify } from '../utils/notify';
 import ClipLoader from 'react-spinners/ClipLoader';
 import styles from '../style/register.module.css';
 import { CREATE_USER } from '../graphql/Register/createUser';
-import {verify} from 'crypto';
 
 
 interface RegisterProps {}

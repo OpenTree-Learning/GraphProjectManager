@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import styles from '../style/dashboard.module.css';
-import { Project } from '../pages/definitions/Dashboard';
+import { Project } from '../types/Dashboard';
 
 
 interface ProjectTileProps {

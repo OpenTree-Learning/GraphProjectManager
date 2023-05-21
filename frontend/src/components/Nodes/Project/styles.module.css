@@ -1,0 +1,24 @@
+.projectNodeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 112px;
+  height: 112px;
+  color: white;
+}
+
+.projectContainer > * {
+  width: 100%;
+}
+
+
+.projectNodeTitle > h4, .projectNodeDescription > p {
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  text-align: center;
+}
+
+.projectNodeDescription {
+  font-size: 10px;
+}

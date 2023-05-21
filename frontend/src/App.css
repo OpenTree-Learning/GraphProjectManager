@@ -23,13 +23,13 @@ body, input, textarea, button {
 }
 
 .taskState_TODO {
-	color: #FFD700;
+	color: #e74c3c;
 }
 .taskState_DOING {
-	color: #4169E1;
+	color: #f1c40f;
 }
 .taskState_DONE {
-	color: #008000;
+	color: #07bc0c;
 }
 
 .invalidInput {

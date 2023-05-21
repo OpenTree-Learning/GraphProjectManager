@@ -1,0 +1,19 @@
+.userNodeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 63px;
+  height: 63px;
+  color: white;
+}
+
+.userContainer > * {
+  width: 100%;
+}
+
+.userNodeTitle > h5 {
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  text-align: center;
+}

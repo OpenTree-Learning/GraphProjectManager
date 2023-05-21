@@ -5,9 +5,9 @@ type User {
   lastname: String
   email: String!
   password: String! @private
-  createdAt: DateTime
+  createdAt: DateTime!
     @timestamp(operations: [CREATE])
-  updatedAt: DateTime
+  updatedAt: DateTime!
     @timestamp(operations: [CREATE, UPDATE])
   projects: [Project!]!
     @relationship(type: "CONTRIBUTES", properties: "Contributes", direction: OUT)

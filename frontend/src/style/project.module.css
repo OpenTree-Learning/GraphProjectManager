@@ -1,0 +1,30 @@
+@import "./variables/colors.css";
+
+
+.node {
+	border-radius: 50%;
+	height: 15px;
+	width: 15px;
+	border: 1px solid #c9d1d9;
+}
+
+.TNode_TODO {
+	background-color: #dd4b39;
+}
+.TNode_DOING {
+	background-color: #dd4b39;
+}
+.TNode_DONE {
+	background-color: #008000;
+}
+
+.PNode {
+	height: 30px;
+	width: 30px;
+	border: 2px solid #abfffe;
+	background-color: #1B4055;
+}
+
+.UNode {
+	background-color: #4b86e8;
+}

@@ -6,7 +6,7 @@ import { TbGitCommit } from 'react-icons/tb';
 import { AiOutlineCheck } from 'react-icons/ai';
 import { AiOutlineClose } from 'react-icons/ai';
 
-import { Activity, ActivityType, CommitActivity, InvitationActivity } from "../pages/definitions/Dashboard";
+import { Activity, ActivityType, CommitActivity, InvitationActivity } from "../types/Dashboard";
 import { ANSWER_INVITATION } from "../graphql/Dashboard/answerInvitation";
 import { notify } from "../utils/notify";
 import styles from '../style/dashboard.module.css';

@@ -1,5 +1,6 @@
 import userResolvers from './user.mutation';
-import projectResolvers from './project.mutation';
+import projectMutationResolvers from './project.mutation';
+import projectQueryResolvers from './project.query';
 import activityResolvers from './activity.query';
 import taskResolvers from './tasks.mutation';
 
@@ -16,12 +17,27 @@ const resolvers = {
 			return null;
 		}
 	},
+	ProjectNode: {
+		__resolveType: (obj: any) => {
+			if (obj.username) {
+				return "UNode";
+			}
+			if (obj.state) {
+				return "TNode";
+			}
+			if (obj.name && obj.description && obj.createdAt && obj.id) {
+				return "PNode";
+			}
+			return null;
+		}
+	},
 	Query: {
-		...activityResolvers.Query
+		...activityResolvers.Query,
+		...projectQueryResolvers.Query
 	},
 	Mutation: {
 		...userResolvers.Mutation,
-		...projectResolvers.Mutation,
+		...projectMutationResolvers.Mutation,
 		...taskResolvers.Mutation
 	}
 }

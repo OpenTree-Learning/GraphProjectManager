@@ -1,0 +1,6 @@
+@import "./variables/colors.css";
+
+
+body {
+  background-color: var(--third-background-color) !important;
+}
