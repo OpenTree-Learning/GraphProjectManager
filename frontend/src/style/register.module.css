@@ -55,7 +55,7 @@
 #registerForm > span {
 	font-size: 10px;
 	width: 80%;
-	color: red;
+	color: var(--error-first-color);
 }
 
 #registerForm > input {
@@ -87,7 +87,7 @@
 }
 
 #backButton:hover {
-	background-color: var(--third-background-color) !important;
+	background-color: var(--error-first-color) !important;
 	cursor: pointer;
 }
 

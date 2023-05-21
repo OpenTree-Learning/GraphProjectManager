@@ -15,12 +15,15 @@
     "d3": "^7.8.4",
     "graphql": "^16.6.0",
     "moment": "^2.29.4",
+    "rc-select": "^14.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dom-server": "^0.0.5",
     "react-icons": "^4.8.0",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
+    "react-select": "^5.7.3",
     "react-spinners": "^0.13.8",
     "react-toastify": "^9.1.2",
     "stream": "^0.0.2",
@@ -54,6 +57,7 @@
   "devDependencies": {
     "@types/d3": "^7.4.0",
     "@types/react-d3-graph": "^2.6.3",
+    "@types/react-modal": "^3.16.0",
     "typescript-plugin-css-modules": "^5.0.0"
   }
 }
