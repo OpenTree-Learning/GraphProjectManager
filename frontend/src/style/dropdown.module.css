@@ -1,0 +1,91 @@
+@import "./variables/colors.css";
+
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.selectContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  max-width: 160px;
+}
+
+.tagsContainer {
+  display: flex;
+  z-index: 2000;
+  padding-right: 0px !important;
+}
+
+.tag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  padding: 5px;
+  margin-right: 5px;
+  background-color: #1b4055;
+}
+
+.tag:hover {
+  filter: brightness(130%);
+  cursor: pointer;
+}
+
+.tag > svg:hover {
+  cursor: pointer;
+}
+
+.select {
+  min-width: 18%;
+  box-shadow: none;
+  border-width: 0px;
+  border-radius: 5px;
+  outline: none;
+}
+
+.selectDisabled {
+  caret-color: transparent;
+}
+
+.select, .itemContainer, .itemContainerSelected, .tagsContainer {
+  background-color: #203131;
+  height: 20px;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.itemsContainerClosed {
+  display: none;
+}
+
+.itemContainer, .itemContainerSelected {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.itemContainer:hover {
+  cursor: pointer;
+}
+
+.itemContainerSelected {
+  background-color: #273b3b;
+}
+
+.itemContainer:first-child {
+  border-radius: 5px 5px 0px 0px;
+}
+
+.itemContainer:last-child {
+  border-radius: 0px 0px 5px 5px;
+}
+

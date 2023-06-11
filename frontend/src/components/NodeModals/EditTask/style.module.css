@@ -64,3 +64,23 @@
 #otherProperties > div {
   margin-right: 20px;
 }
+
+#tags {
+  width: 100%;
+}
+
+.tagOption {
+  display: flex;
+  align-items: center;
+}
+
+.tagOption > * {
+  display: block;
+}
+
+.tagColor {
+  width: 20px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  margin-right: 10px;
+}

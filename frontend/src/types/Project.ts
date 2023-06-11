@@ -28,7 +28,7 @@ export interface TNode extends Node {
   updatedAt: string
   updatedBy: string
   labels: string [],
-  priorityOrder: TPriorityOrder
+  priorityOrder: string,
   state: string
   oldState: string
 }

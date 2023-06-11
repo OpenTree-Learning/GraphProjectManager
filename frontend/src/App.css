@@ -35,3 +35,7 @@ body, input, textarea, button {
 .invalidInput {
 	border: 5px solid red;
 }
+
+.node:hover, .nodeInnerElement:hover {
+  cursor: pointer;
+}

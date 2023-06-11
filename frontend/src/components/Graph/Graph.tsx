@@ -11,15 +11,18 @@ function Graph<T>(props: GraphProps<T>): ReactElement {
   const graphContainerRef = useRef(null);
 
   useEffect(() => {
+    console.log('loading the graph for the first time.');
     // @ts-ignore
-    if (graphContainerRef.current.children.length > 0) {
-      return;
-    }
     createGraph<T>({
       ref: graphContainerRef,
       ...props
     })
-  }, []);
+  }, [props.nodes, props.edges]);
+
+  useEffect(() => {
+    console.log('performing new graph render.');
+  }, [props.nodes]);
+  
 
   return (
     <div ref={graphContainerRef}></div>

@@ -109,7 +109,7 @@ function setEventListeners<T> (
 }
 
 
-function createGraph<T>({
+export function createGraph<T>({
   ref,
   width,
   height,
@@ -131,9 +131,17 @@ function createGraph<T>({
   viewBoxEventListeners
 }: CreateGraphParams<T>) {
 
-  const nodeInnerElementId = (node: T) => `node_inner_element_${node[nodeIdProperty]}`;
+  const nodeInnerElementId = (node: T) => `nodeInnerElement_${node[nodeIdProperty]}`;
+  const nodeId = (node: T) => `node_${node[nodeIdProperty]}`;
+
   let nodesCopy = nodes.map(d => Object.assign({}, d));
   let edgesCopy = edges.map(d => Object.assign({}, d));
+
+
+  if (ref.current?.children.length > 0) {
+    svg.selectAll('circle').remove();
+    svg.selectAll('line').remove();
+  }
 
   const svg = d3.select(ref.current)
     .append('svg')
@@ -173,6 +181,8 @@ function createGraph<T>({
     .attr('r', 20)
     .attr('stroke-width', 5)
     .attr('stroke', 'white')
+    .attr('class', 'node')
+    .attr('id', nodeId)
     .call(drag(simulation));
 
   const defaultArrowHeight = 20;
@@ -192,6 +202,7 @@ function createGraph<T>({
     .join('foreignObject')
     .attr('width', d => getNodeInnerElementSize<T>(nodeSVG, d, nodeIdProperty))
     .attr('height', d => getNodeInnerElementSize<T>(nodeSVG, d, nodeIdProperty))
+    .attr('class', 'nodeInnerElement')
     .call(drag(simulation));
 
   if (nodeInnerElement) {
